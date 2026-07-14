@@ -36,6 +36,8 @@ from models.purchase_order import PurchaseOrder, PurchaseOrderItem
 from models.product import Product
 from models.inventory import Inventory, StockLog
 from models.pricing import ChannelFeeTemplate
+from models.order import Order, OrderItem
+from models.returns import OrderReturn
 target_metadata = Base.metadata
 
 

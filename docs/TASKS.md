@@ -32,9 +32,20 @@
   - Implemented stock logs movement auditing in the UI.
   - Wrote test suite covering catalog creations, manual adjustments, and PO transit integrations.
 
-## In Progress
 - **Milestone 5: Pricing Engine**
+  - Setup ChannelFeeTemplate models with preset defaults (Amazon, Flipkart, Meesho) in the database.
+  - Programmed outward GST tax-inclusive calculations and margin deductions router `/pricing/calculate`.
+  - Built interactive PricingView panel featuring product SKU binding and live fee/tax breakdowns.
+  - Wrote test cases verifying default template seeding, manual overrides, and commission deductions.
+
+- **Milestone 6: Orders & Returns Syncing**
+  - Designed SQLAlchemy schemas for Orders, OrderItems, and OrderReturns.
+  - Created status-driven state machine reserving stock on order placement, shipping stock out of the warehouse, and restocking returns back into physical inventory.
+  - Implemented channel sync triggers simulation in the frontend pulling real-time mock data.
+  - Added full analytics summary cards for Sales, Payouts, Profit Margins, and Returns Rate.
+  - Wrote test suite verifying inventory allocations, shipping reductions, and returns restocks.
+
+## In Progress
+- **Milestone 7: Integration, Testing & Documentation Polish**
 
 ## Backlog
-- Milestone 6: Orders & Returns Syncing
-- Milestone 7: Integration, Testing & Documentation Polish

@@ -13,6 +13,7 @@ import POsView from '@/components/POsView';
 import ProductsView from '@/components/ProductsView';
 import InventoryView from '@/components/InventoryView';
 import PricingView from '@/components/PricingView';
+import OrdersView from '@/components/OrdersView';
 
 import { 
   TrendingUp, 
@@ -29,7 +30,8 @@ import {
   Lock,
   Loader2,
   FolderTree,
-  Users
+  Users,
+  ShoppingCart
 } from 'lucide-react';
 
 export default function Home() {
@@ -309,6 +311,17 @@ export default function Home() {
               <Percent size={16} />
               Pricing Engine
             </button>
+            <button
+              onClick={() => setActiveTab('orders')}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
+                activeTab === 'orders'
+                  ? 'bg-indigo-600 text-white'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+              }`}
+            >
+              <ShoppingCart size={16} />
+              Orders & Returns
+            </button>
           </nav>
         </div>
 
@@ -538,6 +551,9 @@ export default function Home() {
 
         {/* Tab 7: Pricing Engine */}
         {activeTab === 'pricing-engine' && token && <PricingView token={token} />}
+
+        {/* Tab 8: Orders & Returns */}
+        {activeTab === 'orders' && token && <OrdersView token={token} />}
       </main>
     </div>
   );

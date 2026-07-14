@@ -80,13 +80,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return true;
       } else {
         const errData = await res.json();
-        setError(errData.detail || 'Login failed. Incorrect email or password.');
+        setError(parseErrorDetail(errData.detail) || 'Login failed. Incorrect email or password.');
         return false;
       }
     } catch (err) {
       setError('Network error occurred. Please try again.');
       return false;
     }
+  };
+
+  const parseErrorDetail = (detail: any): string => {
+    if (!detail) return '';
+    if (typeof detail === 'string') return detail;
+    if (Array.isArray(detail) && detail.length > 0) {
+      const first = detail[0];
+      if (first && typeof first === 'object') {
+        const field = first.loc ? first.loc.filter((x: any) => x !== 'body').join('.') : '';
+        return `${field ? `[${field}] ` : ''}${first.msg || 'Validation failed'}`;
+      }
+    }
+    if (typeof detail === 'object') {
+      return detail.message || JSON.stringify(detail);
+    }
+    return String(detail);
   };
 
   const signup = async (email: string, password: string, name: string, role: string): Promise<boolean> => {
@@ -105,7 +121,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return await login(email, password);
       } else {
         const errData = await res.json();
-        setError(errData.detail || 'Signup failed. Please try again.');
+        setError(parseErrorDetail(errData.detail) || 'Signup failed. Please try again.');
         return false;
       }
     } catch (err) {

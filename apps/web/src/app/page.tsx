@@ -12,6 +12,7 @@ import ForexView from '@/components/ForexView';
 import POsView from '@/components/POsView';
 import ProductsView from '@/components/ProductsView';
 import InventoryView from '@/components/InventoryView';
+import PricingView from '@/components/PricingView';
 
 import { 
   TrendingUp, 
@@ -297,6 +298,17 @@ export default function Home() {
               <Layers size={16} />
               Inventory
             </button>
+            <button
+              onClick={() => setActiveTab('pricing-engine')}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
+                activeTab === 'pricing-engine'
+                  ? 'bg-indigo-600 text-white'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+              }`}
+            >
+              <Percent size={16} />
+              Pricing Engine
+            </button>
           </nav>
         </div>
 
@@ -523,6 +535,9 @@ export default function Home() {
 
         {/* Tab 6: Inventory */}
         {activeTab === 'inventory' && token && <InventoryView token={token} />}
+
+        {/* Tab 7: Pricing Engine */}
+        {activeTab === 'pricing-engine' && token && <PricingView token={token} />}
       </main>
     </div>
   );

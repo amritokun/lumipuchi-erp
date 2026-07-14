@@ -35,6 +35,7 @@ from models.forex import ForexRate
 from models.purchase_order import PurchaseOrder, PurchaseOrderItem
 from models.product import Product
 from models.inventory import Inventory, StockLog
+from models.pricing import ChannelFeeTemplate
 target_metadata = Base.metadata
 
 

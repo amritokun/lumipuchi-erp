@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import Dict, Any
 
 from database import engine, Base
-from routers import auth, supplier, forex, purchase_order, product, inventory
+from routers import auth, supplier, forex, purchase_order, product, inventory, pricing
 
 import sys
 
@@ -18,6 +18,7 @@ if "pytest" not in sys.modules:
         import models.purchase_order
         import models.product
         import models.inventory
+        import models.pricing
         Base.metadata.create_all(bind=engine)
     except Exception as e:
         print(f"Skipping database schema initialization: {e}")
@@ -45,6 +46,7 @@ app.include_router(forex.router)
 app.include_router(purchase_order.router)
 app.include_router(product.router)
 app.include_router(inventory.router)
+app.include_router(pricing.router)
 
 class StatusResponse(BaseModel):
     status: str

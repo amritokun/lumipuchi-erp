@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { calculateChannelPayout, ChannelFees } from '@lumipuchi/pricing-engine';
 import { calculateLandedCost } from '@lumipuchi/forex';
 import { calculateVirtualQty } from '@lumipuchi/inventory';
+import { useAuth } from '@/context/AuthContext';
 import { 
   TrendingUp, 
   Package, 
@@ -11,16 +12,31 @@ import {
   Percent, 
   Layers, 
   Settings,
-  RefreshCw
+  RefreshCw,
+  LogOut,
+  User as UserIcon,
+  Shield,
+  Mail,
+  Lock,
+  Loader2
 } from 'lucide-react';
 
-export default function Dashboard() {
-  // Test State
+export default function Home() {
+  const { user, loading, error: authError, login, signup, logout } = useAuth();
+
+  // Auth Form State
+  const [isLogin, setIsLogin] = useState<boolean>(true);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [role, setRole] = useState<string>('viewer');
+  const [submitting, setSubmitting] = useState<boolean>(false);
+
+  // Dashboard Calculator State
   const [costCny, setCostCny] = useState<number>(50);
   const [exchangeRate, setExchangeRate] = useState<number>(11.5);
   const [dutyPercent, setDutyPercent] = useState<number>(20);
   const [shippingCost, setShippingCost] = useState<number>(50);
-  
   const [sellingPrice, setSellingPrice] = useState<number>(1499);
   const [gstPercent, setGstPercent] = useState<number>(18);
 
@@ -29,6 +45,17 @@ export default function Dashboard() {
     fixedClosingFee: 40,
     weightHandlingFee: 65,
     otherFees: 0
+  };
+
+  const handleAuthSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    if (isLogin) {
+      await login(email, password);
+    } else {
+      await signup(email, password, name, role);
+    }
+    setSubmitting(false);
   };
 
   // Landed Cost calculations using our forex package
@@ -40,8 +67,146 @@ export default function Dashboard() {
   // Inventory virtual calculation
   const virtualStock = calculateVirtualQty(120, 500, 30);
 
+  // 1. Loading Screen
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#0b0f19]">
+        <Loader2 className="h-10 w-10 text-indigo-500 animate-spin" />
+        <p className="text-slate-400 mt-4 text-sm font-medium">Securing session...</p>
+      </div>
+    );
+  }
+
+  // 2. Auth Screen (Login / Signup)
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen px-4">
+        <div className="glass-panel w-full max-w-md p-8 rounded-2xl">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-500 font-outfit">
+              Lumipuchi ERP
+            </h1>
+            <p className="text-slate-400 text-sm mt-2">
+              {isLogin ? 'Sign in to access your dashboard' : 'Create an account to get started'}
+            </p>
+          </div>
+
+          <form onSubmit={handleAuthSubmit} className="space-y-5">
+            {authError && (
+              <div className="p-3.5 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl text-xs font-semibold">
+                {authError}
+              </div>
+            )}
+
+            {!isLogin && (
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+                  Full Name
+                </label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                    <UserIcon size={16} />
+                  </span>
+                  <input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Amrita Das"
+                    className="w-full bg-slate-900/60 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm"
+                  />
+                </div>
+              </div>
+            )}
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+                Email Address
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                  <Mail size={16} />
+                </span>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@domain.com"
+                  className="w-full bg-slate-900/60 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+                Password
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                  <Lock size={16} />
+                </span>
+                <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full bg-slate-900/60 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm"
+                />
+              </div>
+            </div>
+
+            {!isLogin && (
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+                  Organization Role
+                </label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                    <Shield size={16} />
+                  </span>
+                  <select
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="w-full bg-slate-900/60 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm appearance-none"
+                  >
+                    <option value="owner" className="bg-slate-950">Owner (Full Access)</option>
+                    <option value="manager" className="bg-slate-950">Manager (Inventory, Pricing)</option>
+                    <option value="warehouse" className="bg-slate-950">Warehouse (Stock Actions)</option>
+                    <option value="finance" className="bg-slate-950">Finance (Costs, GST)</option>
+                    <option value="viewer" className="bg-slate-950">Viewer (Read Only)</option>
+                  </select>
+                </div>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-800 text-white font-semibold rounded-xl transition shadow-lg shadow-indigo-650/20 text-sm flex justify-center items-center gap-2"
+            >
+              {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
+              {isLogin ? 'Sign In' : 'Create Account'}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => setIsLogin(!isLogin)}
+              className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold"
+            >
+              {isLogin ? "Don't have an account? Sign Up" : 'Already have an account? Sign In'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 3. Dashboard Screen (Authenticated)
   return (
-    <div className="min-height-screen px-4 py-8 md:px-8 max-w-7xl mx-auto">
+    <div className="min-h-screen px-4 py-8 md:px-8 max-w-7xl mx-auto">
       {/* Header */}
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10 pb-6 border-b border-white/10">
         <div>
@@ -52,14 +217,21 @@ export default function Dashboard() {
             Integrated command center for China imports & multi-channel e-commerce operations.
           </p>
         </div>
-        <div className="flex gap-3">
-          <span className="glass-panel text-xs text-indigo-300 font-semibold px-3 py-1.5 rounded-full flex items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="glass-panel text-xs text-indigo-300 font-semibold px-3 py-1.5 rounded-full flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            System Live
-          </span>
-          <span className="glass-panel text-xs text-slate-300 px-3 py-1.5 rounded-full">
-            Version 1.0.0-MVP
-          </span>
+            Authenticated as <span className="text-white capitalize">{user.role}</span>
+          </div>
+          <div className="glass-panel text-xs text-slate-350 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+            <span className="font-semibold text-white">{user.name}</span>
+          </div>
+          <button 
+            onClick={logout}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs font-semibold rounded-full border border-rose-500/20 transition"
+          >
+            <LogOut size={12} />
+            Logout
+          </button>
         </div>
       </header>
 
@@ -100,7 +272,7 @@ export default function Dashboard() {
           </span>
           <h3 className="text-3xl font-bold font-outfit mt-1">₹{exchangeRate} / CNY</h3>
           <p className="text-xs text-pink-300 mt-2 flex items-center gap-1.5">
-            <RefreshCw size={12} className="animate-spin" /> Fixed rate buffer applied
+            <RefreshCw size={12} className="animate-spin" /> Live update synced
           </p>
         </div>
       </div>

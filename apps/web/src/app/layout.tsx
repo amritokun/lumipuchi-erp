@@ -1,5 +1,6 @@
 import './globals.css';
 import React from 'react';
+import { AuthProvider } from '@/context/AuthContext';
 
 export const metadata = {
   title: 'Lumipuchi ERP - Lead Seller Dashboard',
@@ -19,8 +20,11 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
 }
+

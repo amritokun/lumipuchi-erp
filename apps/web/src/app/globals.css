@@ -5,7 +5,7 @@
 :root {
   --background: #0b0f19;
   --foreground: #f8fafc;
-  --primary: #6366f1;
+  --primary: #D13670;
   --primary-foreground: #ffffff;
   --card: rgba(17, 24, 39, 0.7);
   --card-foreground: #f1f5f9;
@@ -19,8 +19,8 @@ body {
   background: var(--background);
   font-family: 'Inter', system-ui, sans-serif;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(209, 54, 112, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(182, 91, 136, 0.15) 0px, transparent 50%);
   background-attachment: fixed;
   min-height: 100vh;
 }
@@ -44,6 +44,6 @@ body {
 
 .glass-card:hover {
   background: rgba(30, 41, 59, 0.6);
-  border-color: rgba(99, 102, 241, 0.3);
+  border-color: rgba(209, 54, 112, 0.3);
   transform: translateY(-2px);
 }

@@ -1,0 +1,46 @@
+# Production-ready Dockerfile for Next.js Web App
+FROM node:20-alpine AS builder
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+# Copy root workspace package info
+COPY package.json package-lock.json* ./
+COPY packages/ ./packages/
+COPY apps/web/package.json ./apps/web/
+
+# Install dependencies
+RUN npm ci
+
+# Copy web source and build packages
+COPY apps/web/ ./apps/web/
+RUN npm run build --workspace=@lumipuchi/shared
+RUN npm run build --workspace=@lumipuchi/forex
+RUN npm run build --workspace=@lumipuchi/inventory
+RUN npm run build --workspace=@lumipuchi/pricing-engine
+
+# Build web client
+ENV NEXT_TELEMETRY_DISABLED 1
+RUN npm run build --workspace=@lumipuchi/web
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/apps/web/public ./apps/web/public
+COPY --from=builder /app/apps/web/.next ./apps/web/.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/apps/web/package.json ./apps/web/package.json
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+CMD ["npm", "start", "--workspace=@lumipuchi/web"]

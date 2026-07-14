@@ -1,0 +1,10 @@
+lumipuchi-erp/
+ apps/web
+ apps/api
+ packages/pricing-engine
+ packages/inventory
+ packages/forex
+ packages/shared
+ docs
+ docker
+ .github

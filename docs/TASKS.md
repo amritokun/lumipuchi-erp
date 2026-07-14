@@ -24,10 +24,17 @@
   - Integrated dynamic line item calculations, currency automatic seeding, and manual lock parameters.
   - Added full test suite verifying procurement and landed cost calculation correctness.
 
-## In Progress
 - **Milestone 4: Product Catalog & Inventory Tracking**
+  - Setup Product and Inventory database schemas with one-to-one relations.
+  - Implemented automatic inventory record initialization upon product creation.
+  - Programmed side-effect stock quantity adjustments triggered on Purchase Order status transitions.
+  - Built custom Next.js master catalog ProductsView and virtual/physical stock tracker InventoryView.
+  - Implemented stock logs movement auditing in the UI.
+  - Wrote test suite covering catalog creations, manual adjustments, and PO transit integrations.
+
+## In Progress
+- **Milestone 5: Pricing Engine**
 
 ## Backlog
-- Milestone 5: Pricing Engine
 - Milestone 6: Orders & Returns Syncing
 - Milestone 7: Integration, Testing & Documentation Polish

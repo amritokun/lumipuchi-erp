@@ -24,9 +24,19 @@ export interface Product {
   name: string;
   description?: string;
   supplier_id: string;
-  moq: number; // Minimum Order Quantity
-  cost_cny: number; // Cost in Chinese Yuan
-  cost_usd: number; // Cost in USD
-  landed_cost_inr?: number; // Calculated Landed Cost in INR
+  supplier: Supplier;
+  is_active: boolean;
+  hsn?: string;
+  gst_percent: number;
+  weight: number;
+  dimensions?: string;
+  barcode?: string;
+  qrcode?: string;
+  brand?: string;
+  catalogue_id?: string;
+  category?: string;
+  variant?: string;
+  color?: string;
+  supplier_sku?: string;
 }
 

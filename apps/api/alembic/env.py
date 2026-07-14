@@ -33,6 +33,8 @@ from models.user import User
 from models.supplier import Supplier
 from models.forex import ForexRate
 from models.purchase_order import PurchaseOrder, PurchaseOrderItem
+from models.product import Product
+from models.inventory import Inventory, StockLog
 target_metadata = Base.metadata
 
 

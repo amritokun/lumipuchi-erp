@@ -5,6 +5,8 @@ from typing import List
 from database import get_db
 from models.purchase_order import PurchaseOrder, PurchaseOrderItem
 from models.supplier import Supplier
+from models.product import Product
+from models.inventory import Inventory, StockLog
 from schemas.purchase_order import PurchaseOrderCreate, PurchaseOrderResponse, PurchaseOrderUpdate
 from services.landed_cost import calculate_po_landed_costs
 from auth import get_current_user, RoleChecker
@@ -122,6 +124,47 @@ def get_purchase_order(po_id: str, db: Session = Depends(get_db), _=allow_read):
         )
     return po
 
+def handle_po_status_transition(po: PurchaseOrder, old_status: str, new_status: str, db: Session):
+    if old_status == new_status:
+        return
+        
+    for item in po.items:
+        # Find product by SKU
+        prod = db.query(Product).filter(Product.sku == item.sku).first()
+        if not prod or not prod.inventory:
+            continue
+            
+        inv = prod.inventory
+        
+        # 1. Reverse old status effects
+        if old_status == "shipped":
+            inv.in_transit_qty = max(0, inv.in_transit_qty - item.quantity)
+        elif old_status == "delivered":
+            inv.warehouse_qty = max(0, inv.warehouse_qty - item.quantity)
+            # Create a reverse log
+            db_log = StockLog(
+                id=str(uuid.uuid4()),
+                product_id=prod.id,
+                log_type="stock_out",
+                quantity=-item.quantity,
+                reference=f"PO Reversed: {po.po_number}"
+            )
+            db.add(db_log)
+            
+        # 2. Apply new status effects
+        if new_status == "shipped":
+            inv.in_transit_qty += item.quantity
+        elif new_status == "delivered":
+            inv.warehouse_qty += item.quantity
+            db_log = StockLog(
+                id=str(uuid.uuid4()),
+                product_id=prod.id,
+                log_type="stock_in",
+                quantity=item.quantity,
+                reference=f"PO Received: {po.po_number}"
+            )
+            db.add(db_log)
+
 @router.put("/{po_id}", response_model=PurchaseOrderResponse)
 def update_purchase_order(
     po_id: str,
@@ -136,10 +179,17 @@ def update_purchase_order(
             detail="Purchase Order not found"
         )
         
+    old_status = po.status
+    
     for field, value in po_in.dict(exclude_unset=True).items():
         setattr(po, field, value)
         
     db.commit()
+    
+    # Trigger transition side effects if status changed
+    if po_in.status is not None:
+        handle_po_status_transition(po, old_status, po_in.status, db)
+        db.commit()
     
     # Recalculate with updated inputs
     recalculate_po_and_save(po, db)

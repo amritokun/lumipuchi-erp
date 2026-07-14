@@ -10,6 +10,8 @@ import { useAuth } from '@/context/AuthContext';
 import SuppliersView from '@/components/SuppliersView';
 import ForexView from '@/components/ForexView';
 import POsView from '@/components/POsView';
+import ProductsView from '@/components/ProductsView';
+import InventoryView from '@/components/InventoryView';
 
 import { 
   TrendingUp, 
@@ -252,6 +254,17 @@ export default function Home() {
               Suppliers
             </button>
             <button
+              onClick={() => setActiveTab('products')}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
+                activeTab === 'products'
+                  ? 'bg-indigo-600 text-white'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+              }`}
+            >
+              <Package size={16} />
+              Products
+            </button>
+            <button
               onClick={() => setActiveTab('forex')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
                 activeTab === 'forex'
@@ -272,6 +285,17 @@ export default function Home() {
             >
               <FolderTree size={16} />
               Purchase Orders
+            </button>
+            <button
+              onClick={() => setActiveTab('inventory')}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
+                activeTab === 'inventory'
+                  ? 'bg-indigo-600 text-white'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+              }`}
+            >
+              <Layers size={16} />
+              Inventory
             </button>
           </nav>
         </div>
@@ -488,11 +512,17 @@ export default function Home() {
         {/* Tab 2: Suppliers */}
         {activeTab === 'suppliers' && token && <SuppliersView token={token} />}
 
-        {/* Tab 3: Forex */}
+        {/* Tab 3: Products */}
+        {activeTab === 'products' && token && <ProductsView token={token} />}
+
+        {/* Tab 4: Forex */}
         {activeTab === 'forex' && token && <ForexView token={token} />}
 
-        {/* Tab 4: POs */}
+        {/* Tab 5: POs */}
         {activeTab === 'pos' && token && <POsView token={token} />}
+
+        {/* Tab 6: Inventory */}
+        {activeTab === 'inventory' && token && <InventoryView token={token} />}
       </main>
     </div>
   );

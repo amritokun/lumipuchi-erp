@@ -29,7 +29,10 @@ if config.config_file_name is not None:
 
 # Import Base and models for 'autogenerate' support
 from database import Base
-from models.user import User # imports model so it's registered
+from models.user import User
+from models.supplier import Supplier
+from models.forex import ForexRate
+from models.purchase_order import PurchaseOrder, PurchaseOrderItem
 target_metadata = Base.metadata
 
 

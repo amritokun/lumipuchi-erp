@@ -2,18 +2,20 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  role: 'admin' | 'manager' | 'accountant';
+  role: 'owner' | 'manager' | 'warehouse' | 'finance' | 'viewer';
+  is_active: boolean;
 }
 
 export interface Supplier {
   id: string;
   name: string;
-  contactName?: string;
+  contact_name?: string;
   email?: string;
   phone?: string;
   address?: string;
   country: string; // e.g. "China"
   currency: string; // e.g. "USD" or "CNY"
+  is_active: boolean;
 }
 
 export interface Product {
@@ -21,9 +23,10 @@ export interface Product {
   sku: string;
   name: string;
   description?: string;
-  supplierId: string;
+  supplier_id: string;
   moq: number; // Minimum Order Quantity
-  costCny: number; // Cost in Chinese Yuan
-  costUsd: number; // Cost in USD
-  landedCostInr?: number; // Calculated Landed Cost in INR
+  cost_cny: number; // Cost in Chinese Yuan
+  cost_usd: number; // Cost in USD
+  landed_cost_inr?: number; // Calculated Landed Cost in INR
 }
+

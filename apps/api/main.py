@@ -4,13 +4,18 @@ from pydantic import BaseModel
 from typing import Dict, Any
 
 from database import engine, Base
-from routers import auth
+from routers import auth, supplier, forex, purchase_order
 
 import sys
 
 # Initialize database schemas (skipped during tests)
 if "pytest" not in sys.modules:
     try:
+        # Import models explicitly to ensure they are registered on Base
+        import models.user
+        import models.supplier
+        import models.forex
+        import models.purchase_order
         Base.metadata.create_all(bind=engine)
     except Exception as e:
         print(f"Skipping database schema initialization: {e}")
@@ -33,6 +38,9 @@ app.add_middleware(
 
 # Register routers
 app.include_router(auth.router)
+app.include_router(supplier.router)
+app.include_router(forex.router)
+app.include_router(purchase_order.router)
 
 class StatusResponse(BaseModel):
     status: str

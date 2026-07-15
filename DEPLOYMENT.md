@@ -14,8 +14,8 @@ Before starting the server, you must point your domain to your VPS's public IP a
 
 Go to your domain registrar (e.g., GoDaddy, Namecheap, Cloudflare) and create **two A Records**:
 
-1.  **Host/Name:** `@` (or leave blank) -> **Value/Points To:** `<Your_VPS_IP>`
-2.  **Host/Name:** `api` -> **Value/Points To:** `<Your_VPS_IP>`
+1.  **Host/Name:** `admin` -> **Value/Points To:** `<Your_VPS_IP>` (For the web dashboard)
+2.  **Host/Name:** `api` -> **Value/Points To:** `<Your_VPS_IP>` (For the backend API)
 
 *Note: DNS propagation can take a few minutes to an hour.*
 
@@ -41,24 +41,24 @@ cd lumipuchi-erp
 
 Once inside the repository folder, you can spin up the entire production stack using Docker Compose. 
 
-Just define your domain using the `DOMAIN` environment variable and point Docker to the production config file:
+Just define your web and API domains using environment variables and point Docker to the production config file:
 
 ```bash
-DOMAIN=yourdomain.com sudo -E docker compose -f docker-compose.prod.yml up -d
+WEB_DOMAIN=admin.lumipuchi.in API_DOMAIN=api.lumipuchi.in sudo -E docker compose -f docker-compose.prod.yml up -d
 ```
-*(Replace `yourdomain.com` with your actual domain, e.g., `lumipuchi.in`)*
+*(Replace the domains with your actual desired subdomains if different)*
 
 ### What happens in the background?
 1.  **PostgreSQL & Redis** containers spin up for your database and caching layer.
 2.  **FastAPI (Backend)** builds and starts listening on port 8000 internally.
 3.  **Next.js (Frontend)** builds an optimized production bundle and starts on port 3000.
-4.  **Caddy** boots up, detects your `DOMAIN`, automatically fetches HTTPS certificates from Let's Encrypt, and routes external web traffic cleanly to your frontend and backend containers.
+4.  **Caddy** boots up, detects your domains, automatically fetches HTTPS certificates from Let's Encrypt, and routes external web traffic cleanly to your frontend and backend containers.
 
 ## Step 5: Verify Your Deployment
 
 Open your browser and navigate to:
-*   Frontend: `https://yourdomain.com`
-*   Backend API Docs: `https://api.yourdomain.com/docs`
+*   Frontend: `https://admin.lumipuchi.in`
+*   Backend API Docs: `https://api.lumipuchi.in/docs`
 
 ## Updating the App in the Future
 
@@ -67,6 +67,6 @@ When you push new code to your GitHub repository and want to update your live se
 ```bash
 cd lumipuchi-erp
 git pull origin main
-DOMAIN=yourdomain.com sudo -E docker compose -f docker-compose.prod.yml up -d --build
+WEB_DOMAIN=admin.lumipuchi.in API_DOMAIN=api.lumipuchi.in sudo -E docker compose -f docker-compose.prod.yml up -d --build
 ```
 This pulls the new code, rebuilds the containers without downtime, and gracefully restarts the services!

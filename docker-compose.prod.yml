@@ -37,7 +37,7 @@ services:
     container_name: lumipuchi-web
     restart: always
     environment:
-      - NEXT_PUBLIC_API_URL=https://api.${DOMAIN}
+      - NEXT_PUBLIC_API_URL=https://${API_DOMAIN}
     depends_on:
       - api
 
@@ -49,7 +49,8 @@ services:
       - "80:80"
       - "443:443"
     environment:
-      - DOMAIN=${DOMAIN}
+      - WEB_DOMAIN=${WEB_DOMAIN}
+      - API_DOMAIN=${API_DOMAIN}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data

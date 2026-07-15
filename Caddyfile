@@ -1,7 +1,7 @@
-{$DOMAIN} {
+{$WEB_DOMAIN} {
     reverse_proxy web:3000
 }
 
-api.{$DOMAIN} {
+{$API_DOMAIN} {
     reverse_proxy api:8000
 }

@@ -1,10 +1,11 @@
-import './globals.css';
-import React from 'react';
-import { AuthProvider } from '@/context/AuthContext';
+import "./globals.css";
+import React from "react";
+import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata = {
-  title: 'Lumipuchi ERP - Lead Seller Dashboard',
-  description: 'Production-ready open-source ERP for Indian e-commerce sellers importing from China.',
+  title: "Lumipuchi ERP - Lead Seller Dashboard",
+  description:
+    "Production-ready open-source ERP for Indian e-commerce sellers importing from China.",
 };
 
 export default function RootLayout({
@@ -16,15 +17,19 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
       </head>
       <body>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
 }
-

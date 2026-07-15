@@ -8,11 +8,14 @@ from models.user import User, UserRole
 
 # Set up test database (SQLite in-memory)
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test_pricing.db"
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Create tables
 Base.metadata.create_all(bind=engine)
+
 
 def override_get_db():
     try:
@@ -21,9 +24,11 @@ def override_get_db():
     finally:
         db.close()
 
+
 app.dependency_overrides[get_db] = override_get_db
 
 client = TestClient(app)
+
 
 @pytest.fixture(autouse=True)
 def clean_db():
@@ -32,37 +37,40 @@ def clean_db():
     Base.metadata.create_all(bind=engine)
     yield
 
-def get_auth_headers(email: str = "finance@lumipuchi.in", role: str = "finance") -> dict:
+
+def get_auth_headers(
+    email: str = "finance@lumipuchi.in", role: str = "finance"
+) -> dict:
     client.post(
         "/auth/signup",
         json={
             "email": email,
             "password": "securepassword",
             "name": "Finance Op",
-            "role": role
-        }
+            "role": role,
+        },
     )
     login_response = client.post(
-        "/auth/login",
-        data={"username": email, "password": "securepassword"}
+        "/auth/login", data={"username": email, "password": "securepassword"}
     )
     token = login_response.json()["access_token"]
     return {"Authorization": f"Bearer {token}"}
 
+
 def test_templates_seeding_and_creation():
     headers = get_auth_headers()
-    
+
     # 1. List templates (triggers seeding)
     response = client.get("/pricing/templates", headers=headers)
     assert response.status_code == 200
     templates = response.json()
-    assert len(templates) >= 4 # Amazon Easy Ship, Amazon FBA, Flipkart, Meesho
-    
+    assert len(templates) >= 4  # Amazon Easy Ship, Amazon FBA, Flipkart, Meesho
+
     amazon_es = next(t for t in templates if t["channel_name"] == "Amazon Easy Ship")
     assert amazon_es["referral_fee_percent"] == 12.0
     assert amazon_es["fixed_closing_fee"] == 40.0
     assert amazon_es["weight_handling_fee"] == 65.0
-    
+
     # 2. Create custom template
     custom_res = client.post(
         "/pricing/templates",
@@ -72,16 +80,17 @@ def test_templates_seeding_and_creation():
             "referral_fee_percent": 8.0,
             "fixed_closing_fee": 20.0,
             "weight_handling_fee": 45.0,
-            "other_fees": 5.0
-        }
+            "other_fees": 5.0,
+        },
     )
     assert custom_res.status_code == 201
     custom_data = custom_res.json()
     assert custom_data["channel_name"] == "My Custom Marketplace"
 
+
 def test_pricing_calculation_with_manual_overrides():
     headers = get_auth_headers()
-    
+
     # Target selling price = 1000
     # Landed Cost = 300
     # GST = 18% -> GST amount = 1000 * 18/118 = 152.542
@@ -103,12 +112,12 @@ def test_pricing_calculation_with_manual_overrides():
             "referral_fee_percent": 10.0,
             "fixed_closing_fee": 30.0,
             "weight_handling_fee": 40.0,
-            "other_fees": 0.0
-        }
+            "other_fees": 0.0,
+        },
     )
     assert response.status_code == 200
     data = response.json()
-    
+
     assert data["referral_fee"] == 100.0
     assert data["total_fees"] == 170.0
     assert abs(data["gst_amount"] - 152.54) < 0.1
@@ -116,13 +125,14 @@ def test_pricing_calculation_with_manual_overrides():
     assert abs(data["net_margin_amount"] - 377.46) < 0.1
     assert abs(data["net_margin_percent"] - 37.75) < 0.1
 
+
 def test_pricing_calculation_with_template():
     headers = get_auth_headers()
-    
+
     # 1. Trigger seeding
     templates = client.get("/pricing/templates", headers=headers).json()
     meesho_t = next(t for t in templates if t["channel_name"] == "Meesho")
-    
+
     # Target SP = 500, Landed Cost = 150, GST = 12%
     # Meesho template: referral 2%, closing 0, weight 50, other 0
     # Referral Fee = 500 * 2% = 10
@@ -137,8 +147,8 @@ def test_pricing_calculation_with_template():
             "selling_price": 500.0,
             "landed_cost": 150.0,
             "gst_percent": 12.0,
-            "template_id": meesho_t["id"]
-        }
+            "template_id": meesho_t["id"],
+        },
     )
     assert response.status_code == 200
     data = response.json()

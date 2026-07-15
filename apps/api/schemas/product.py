@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from schemas.supplier import SupplierResponse
 
+
 class ProductBase(BaseModel):
     sku: str = Field(..., min_length=2, max_length=50)
     name: str = Field(..., min_length=2, max_length=150)
@@ -20,10 +21,12 @@ class ProductBase(BaseModel):
     barcode: Optional[str] = None
     qrcode: Optional[str] = None
 
+
 class ProductCreate(ProductBase):
     reorder_level: int = 10
     shelf: Optional[str] = None
     bin: Optional[str] = None
+
 
 class ProductUpdate(BaseModel):
     name: Optional[str] = None
@@ -39,6 +42,7 @@ class ProductUpdate(BaseModel):
     barcode: Optional[str] = None
     qrcode: Optional[str] = None
     is_active: Optional[bool] = None
+
 
 class ProductResponse(ProductBase):
     id: str

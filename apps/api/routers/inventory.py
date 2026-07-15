@@ -8,31 +8,33 @@ from schemas.inventory import InventoryResponse, InventoryUpdate, StockLogRespon
 from auth import get_current_user, RoleChecker
 from models.user import UserRole
 
-router = APIRouter(
-    prefix="/inventory",
-    tags=["inventory"]
-)
+router = APIRouter(prefix="/inventory", tags=["inventory"])
 
 allow_read = Depends(get_current_user)
-allow_write = Depends(RoleChecker([UserRole.OWNER, UserRole.MANAGER, UserRole.WAREHOUSE]))
+allow_write = Depends(
+    RoleChecker([UserRole.OWNER, UserRole.MANAGER, UserRole.WAREHOUSE])
+)
+
 
 @router.get("", response_model=List[InventoryResponse])
 def list_inventory(db: Session = Depends(get_db), _=allow_read):
     return db.query(Inventory).all()
 
+
 @router.get("/logs", response_model=List[StockLogResponse])
 def list_stock_logs(db: Session = Depends(get_db), _=allow_read):
     return db.query(StockLog).order_by(StockLog.created_at.desc()).all()
+
 
 @router.get("/{product_id}", response_model=InventoryResponse)
 def get_inventory(product_id: str, db: Session = Depends(get_db), _=allow_read):
     inv = db.query(Inventory).filter(Inventory.product_id == product_id).first()
     if not inv:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Inventory record not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Inventory record not found"
         )
     return inv
+
 
 @router.put("/{product_id}", response_model=InventoryResponse)
 def adjust_inventory(
@@ -40,13 +42,12 @@ def adjust_inventory(
     inv_update: InventoryUpdate,
     reference: Optional[str] = "Manual Adjustment",
     db: Session = Depends(get_db),
-    _=allow_write
+    _=allow_write,
 ):
     inv = db.query(Inventory).filter(Inventory.product_id == product_id).first()
     if not inv:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Inventory record not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Inventory record not found"
         )
 
     # Calculate change for stock logging if warehouse_qty is adjusted
@@ -59,7 +60,7 @@ def adjust_inventory(
                 product_id=product_id,
                 log_type=log_type,
                 quantity=diff,
-                reference=reference
+                reference=reference,
             )
             db.add(db_log)
 

@@ -1,8 +1,16 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Percent, DollarSign, Settings, Save, RefreshCw, Calculator, ShoppingBag } from 'lucide-react';
-import { Product } from '@lumipuchi/shared';
+import React, { useState, useEffect } from "react";
+import {
+  Percent,
+  DollarSign,
+  Settings,
+  Save,
+  RefreshCw,
+  Calculator,
+  ShoppingBag,
+} from "lucide-react";
+import { Product } from "@lumipuchi/shared";
 
 interface ChannelTemplate {
   id: string;
@@ -40,14 +48,14 @@ export default function PricingView({ token }: PricingViewProps) {
   const [calculating, setCalculating] = useState<boolean>(false);
 
   // Selector states
-  const [selectedProductId, setSelectedProductId] = useState<string>('');
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string>('');
-  
+  const [selectedProductId, setSelectedProductId] = useState<string>("");
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>("");
+
   // Input fields for calculation
   const [sellingPrice, setSellingPrice] = useState<number>(999);
   const [landedCost, setLandedCost] = useState<number>(250);
   const [gstPercent, setGstPercent] = useState<number>(18.0);
-  
+
   // Custom manual fee overrides
   const [useCustomFees, setUseCustomFees] = useState<boolean>(false);
   const [referralFeePercent, setReferralFeePercent] = useState<number>(12.0);
@@ -59,20 +67,22 @@ export default function PricingView({ token }: PricingViewProps) {
   const [calcResult, setCalcResult] = useState<PricingResult | null>(null);
 
   // Template editor state (allows editing of commissions in the ERP)
-  const [editingTemplateId, setEditingTemplateId] = useState<string | null>(null);
+  const [editingTemplateId, setEditingTemplateId] = useState<string | null>(
+    null,
+  );
   const [editReferral, setEditReferral] = useState<number>(0);
   const [editClosing, setEditClosing] = useState<number>(0);
   const [editWeight, setEditWeight] = useState<number>(0);
   const [editOther, setEditOther] = useState<number>(0);
   const [savingTemplate, setSavingTemplate] = useState<boolean>(false);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
   const fetchData = async () => {
     try {
       // Fetch templates
       const tempRes = await fetch(`${API_URL}/pricing/templates`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (tempRes.ok) {
         const tempData = await tempRes.json();
@@ -88,14 +98,14 @@ export default function PricingView({ token }: PricingViewProps) {
 
       // Fetch products
       const prodRes = await fetch(`${API_URL}/products`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (prodRes.ok) {
         const prodData = await prodRes.json();
         setProducts(prodData);
       }
     } catch (err) {
-      console.error('Error fetching pricing metadata:', err);
+      console.error("Error fetching pricing metadata:", err);
     } finally {
       setLoading(false);
     }
@@ -108,7 +118,7 @@ export default function PricingView({ token }: PricingViewProps) {
   // Handle product selection (pre-fills landed cost guess or GST)
   const handleProductChange = (prodId: string) => {
     setSelectedProductId(prodId);
-    const prod = products.find(p => p.id === prodId);
+    const prod = products.find((p) => p.id === prodId);
     if (prod) {
       setGstPercent(prod.gst_percent);
       // Pre-fill landed cost if available or default
@@ -123,7 +133,7 @@ export default function PricingView({ token }: PricingViewProps) {
       const payload: any = {
         selling_price: sellingPrice,
         landed_cost: landedCost,
-        gst_percent: gstPercent
+        gst_percent: gstPercent,
       };
 
       if (useCustomFees) {
@@ -136,12 +146,12 @@ export default function PricingView({ token }: PricingViewProps) {
       }
 
       const res = await fetch(`${API_URL}/pricing/calculate`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
@@ -149,7 +159,7 @@ export default function PricingView({ token }: PricingViewProps) {
         setCalcResult(result);
       }
     } catch (err) {
-      console.error('Error running calculation:', err);
+      console.error("Error running calculation:", err);
     } finally {
       setCalculating(false);
     }
@@ -160,7 +170,18 @@ export default function PricingView({ token }: PricingViewProps) {
     if (token && !loading) {
       handleCalculate();
     }
-  }, [sellingPrice, landedCost, gstPercent, selectedTemplateId, useCustomFees, referralFeePercent, fixedClosingFee, weightHandlingFee, otherFees, templates]);
+  }, [
+    sellingPrice,
+    landedCost,
+    gstPercent,
+    selectedTemplateId,
+    useCustomFees,
+    referralFeePercent,
+    fixedClosingFee,
+    weightHandlingFee,
+    otherFees,
+    templates,
+  ]);
 
   const handleEditTemplate = (t: ChannelTemplate) => {
     setEditingTemplateId(t.id);
@@ -174,17 +195,17 @@ export default function PricingView({ token }: PricingViewProps) {
     setSavingTemplate(true);
     try {
       const res = await fetch(`${API_URL}/pricing/templates/${tId}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           referral_fee_percent: editReferral,
           fixed_closing_fee: editClosing,
           weight_handling_fee: editWeight,
-          other_fees: editOther
-        })
+          other_fees: editOther,
+        }),
       });
 
       if (res.ok) {
@@ -192,7 +213,7 @@ export default function PricingView({ token }: PricingViewProps) {
         fetchData();
       }
     } catch (err) {
-      console.error('Error saving template:', err);
+      console.error("Error saving template:", err);
     } finally {
       setSavingTemplate(false);
     }
@@ -201,15 +222,21 @@ export default function PricingView({ token }: PricingViewProps) {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-primary font-outfit">Outward Pricing & Margin Engine</h2>
-        <p className="text-xs text-slate-400 font-medium">Verify channels payouts and listing profit margins after marketplace fees and GST</p>
+        <h2 className="text-2xl font-bold text-primary font-outfit">
+          Outward Pricing & Margin Engine
+        </h2>
+        <p className="text-xs text-slate-400 font-medium">
+          Verify channels payouts and listing profit margins after marketplace
+          fees and GST
+        </p>
       </div>
 
       {loading ? (
-        <div className="text-center py-10 text-slate-400">Loading pricing channels...</div>
+        <div className="text-center py-10 text-slate-400">
+          Loading pricing channels...
+        </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
           {/* Left Column: Calculator Inputs */}
           <div className="lg:col-span-2 space-y-6">
             <div className="glass-panel p-6 rounded-2xl space-y-5">
@@ -219,28 +246,38 @@ export default function PricingView({ token }: PricingViewProps) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-slate-450 mb-1">Select Product SKU</label>
+                  <label className="block text-xs font-medium text-slate-450 mb-1">
+                    Select Product SKU
+                  </label>
                   <select
                     value={selectedProductId}
                     onChange={(e) => handleProductChange(e.target.value)}
                     className="w-full bg-slate-900/60 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm appearance-none"
                   >
-                    <option value="" className="bg-slate-950">Manual Input (No SKU)</option>
-                    {products.map(p => (
-                      <option key={p.id} value={p.id} className="bg-slate-950">{p.sku} - {p.name}</option>
+                    <option value="" className="bg-slate-950">
+                      Manual Input (No SKU)
+                    </option>
+                    {products.map((p) => (
+                      <option key={p.id} value={p.id} className="bg-slate-950">
+                        {p.sku} - {p.name}
+                      </option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-450 mb-1">Select Commission Template</label>
+                  <label className="block text-xs font-medium text-slate-450 mb-1">
+                    Select Commission Template
+                  </label>
                   <select
                     disabled={useCustomFees}
                     value={selectedTemplateId}
                     onChange={(e) => setSelectedTemplateId(e.target.value)}
                     className="w-full bg-slate-900/60 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm appearance-none disabled:opacity-40"
                   >
-                    {templates.map(t => (
-                      <option key={t.id} value={t.id} className="bg-slate-950">{t.channel_name}</option>
+                    {templates.map((t) => (
+                      <option key={t.id} value={t.id} className="bg-slate-950">
+                        {t.channel_name}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -248,29 +285,41 @@ export default function PricingView({ token }: PricingViewProps) {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-slate-450 mb-1">Target Selling Price (INR inclusive) *</label>
+                  <label className="block text-xs font-medium text-slate-450 mb-1">
+                    Target Selling Price (INR inclusive) *
+                  </label>
                   <input
                     type="number"
                     value={sellingPrice}
-                    onChange={(e) => setSellingPrice(parseFloat(e.target.value) || 0)}
+                    onChange={(e) =>
+                      setSellingPrice(parseFloat(e.target.value) || 0)
+                    }
                     className="w-full bg-slate-900/60 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none text-sm font-bold"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-450 mb-1">Landed Import Cost (INR) *</label>
+                  <label className="block text-xs font-medium text-slate-450 mb-1">
+                    Landed Import Cost (INR) *
+                  </label>
                   <input
                     type="number"
                     value={landedCost}
-                    onChange={(e) => setLandedCost(parseFloat(e.target.value) || 0)}
+                    onChange={(e) =>
+                      setLandedCost(parseFloat(e.target.value) || 0)
+                    }
                     className="w-full bg-slate-900/60 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none text-sm font-bold"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-450 mb-1">Outward GST Rate (%)</label>
+                  <label className="block text-xs font-medium text-slate-450 mb-1">
+                    Outward GST Rate (%)
+                  </label>
                   <input
                     type="number"
                     value={gstPercent}
-                    onChange={(e) => setGstPercent(parseFloat(e.target.value) || 18.0)}
+                    onChange={(e) =>
+                      setGstPercent(parseFloat(e.target.value) || 18.0)
+                    }
                     className="w-full bg-slate-900/60 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none text-sm"
                   />
                 </div>
@@ -285,44 +334,62 @@ export default function PricingView({ token }: PricingViewProps) {
                     onChange={(e) => setUseCustomFees(e.target.checked)}
                     className="rounded bg-slate-900 border-white/10 text-indigo-650 focus:ring-0 focus:ring-offset-0 h-4 w-4"
                   />
-                  <span className="text-xs font-semibold text-slate-350">Apply Manual Fee Overrides (Override templates)</span>
+                  <span className="text-xs font-semibold text-slate-350">
+                    Apply Manual Fee Overrides (Override templates)
+                  </span>
                 </label>
 
                 {useCustomFees && (
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 bg-slate-950/20 p-4 rounded-xl border border-white/5">
                     <div>
-                      <label className="block text-[10px] font-medium text-slate-450 mb-1">Referral Fee %</label>
+                      <label className="block text-[10px] font-medium text-slate-450 mb-1">
+                        Referral Fee %
+                      </label>
                       <input
                         type="number"
                         value={referralFeePercent}
-                        onChange={(e) => setReferralFeePercent(parseFloat(e.target.value) || 0)}
+                        onChange={(e) =>
+                          setReferralFeePercent(parseFloat(e.target.value) || 0)
+                        }
                         className="w-full bg-slate-900/60 border border-white/10 rounded-lg px-3 py-1.5 text-white text-xs"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-medium text-slate-450 mb-1">Closing Fee (INR)</label>
+                      <label className="block text-[10px] font-medium text-slate-450 mb-1">
+                        Closing Fee (INR)
+                      </label>
                       <input
                         type="number"
                         value={fixedClosingFee}
-                        onChange={(e) => setFixedClosingFee(parseFloat(e.target.value) || 0)}
+                        onChange={(e) =>
+                          setFixedClosingFee(parseFloat(e.target.value) || 0)
+                        }
                         className="w-full bg-slate-900/60 border border-white/10 rounded-lg px-3 py-1.5 text-white text-xs"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-medium text-slate-450 mb-1">Weight Handling (INR)</label>
+                      <label className="block text-[10px] font-medium text-slate-450 mb-1">
+                        Weight Handling (INR)
+                      </label>
                       <input
                         type="number"
                         value={weightHandlingFee}
-                        onChange={(e) => setWeightHandlingFee(parseFloat(e.target.value) || 0)}
+                        onChange={(e) =>
+                          setWeightHandlingFee(parseFloat(e.target.value) || 0)
+                        }
                         className="w-full bg-slate-900/60 border border-white/10 rounded-lg px-3 py-1.5 text-white text-xs"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-medium text-slate-450 mb-1">Other Fees (INR)</label>
+                      <label className="block text-[10px] font-medium text-slate-450 mb-1">
+                        Other Fees (INR)
+                      </label>
                       <input
                         type="number"
                         value={otherFees}
-                        onChange={(e) => setOtherFees(parseFloat(e.target.value) || 0)}
+                        onChange={(e) =>
+                          setOtherFees(parseFloat(e.target.value) || 0)
+                        }
                         className="w-full bg-slate-900/60 border border-white/10 rounded-lg px-3 py-1.5 text-white text-xs"
                       />
                     </div>
@@ -336,50 +403,93 @@ export default function PricingView({ token }: PricingViewProps) {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* payout card */}
                 <div className="glass-panel p-5 rounded-2xl border border-indigo-500/10">
-                  <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block">Net Payout (Base)</span>
-                  <h4 className="text-2xl font-extrabold text-white mt-1">₹{calcResult.net_payout.toFixed(2)}</h4>
-                  <p className="text-[10px] text-slate-500 mt-2">Payout after GST and commissions</p>
+                  <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block">
+                    Net Payout (Base)
+                  </span>
+                  <h4 className="text-2xl font-extrabold text-white mt-1">
+                    ₹{calcResult.net_payout.toFixed(2)}
+                  </h4>
+                  <p className="text-[10px] text-slate-500 mt-2">
+                    Payout after GST and commissions
+                  </p>
                 </div>
 
                 {/* margin amount card */}
                 <div className="glass-panel p-5 rounded-2xl border border-indigo-500/10">
-                  <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block">Profit Margin (INR)</span>
-                  <h4 className={`text-2xl font-extrabold mt-1 ${calcResult.net_margin_amount >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                  <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block">
+                    Profit Margin (INR)
+                  </span>
+                  <h4
+                    className={`text-2xl font-extrabold mt-1 ${calcResult.net_margin_amount >= 0 ? "text-emerald-600" : "text-rose-600"}`}
+                  >
                     ₹{calcResult.net_margin_amount.toFixed(2)}
                   </h4>
-                  <p className="text-[10px] text-slate-500 mt-2">Net profit per unit sold</p>
+                  <p className="text-[10px] text-slate-500 mt-2">
+                    Net profit per unit sold
+                  </p>
                 </div>
 
                 {/* margin percent card */}
-                <div className={`glass-panel p-5 rounded-2xl border ${calcResult.net_margin_percent >= 15 ? 'bg-emerald-500/5 border-emerald-500/10' : 'bg-rose-500/5 border-rose-500/10'}`}>
-                  <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block">Margin Percent</span>
-                  <h4 className={`text-2xl font-extrabold mt-1 ${calcResult.net_margin_percent >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                <div
+                  className={`glass-panel p-5 rounded-2xl border ${calcResult.net_margin_percent >= 15 ? "bg-emerald-500/5 border-emerald-500/10" : "bg-rose-500/5 border-rose-500/10"}`}
+                >
+                  <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block">
+                    Margin Percent
+                  </span>
+                  <h4
+                    className={`text-2xl font-extrabold mt-1 ${calcResult.net_margin_percent >= 0 ? "text-emerald-600" : "text-rose-600"}`}
+                  >
                     {calcResult.net_margin_percent.toFixed(1)}%
                   </h4>
                   <p className="text-[10px] text-slate-500 mt-2">
-                    {calcResult.net_margin_percent >= 15 ? 'Healthy profitability' : 'Low margin alert'}
+                    {calcResult.net_margin_percent >= 15
+                      ? "Healthy profitability"
+                      : "Low margin alert"}
                   </p>
                 </div>
 
                 {/* Details Breakdown */}
                 <div className="glass-panel p-6 rounded-2xl md:col-span-3 space-y-4">
-                  <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Fee & Tax Breakdown (INR)</h4>
+                  <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                    Fee & Tax Breakdown (INR)
+                  </h4>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
                     <div className="p-3 bg-slate-950/20 rounded-xl border border-white/5">
-                      <span className="text-slate-500 block">Referral Fee ({useCustomFees ? referralFeePercent : (templates.find(t => t.id === selectedTemplateId)?.referral_fee_percent || 0)}%)</span>
-                      <span className="font-bold text-white mt-0.5 block">₹{calcResult.referral_fee.toFixed(2)}</span>
+                      <span className="text-slate-500 block">
+                        Referral Fee (
+                        {useCustomFees
+                          ? referralFeePercent
+                          : templates.find((t) => t.id === selectedTemplateId)
+                              ?.referral_fee_percent || 0}
+                        %)
+                      </span>
+                      <span className="font-bold text-white mt-0.5 block">
+                        ₹{calcResult.referral_fee.toFixed(2)}
+                      </span>
                     </div>
                     <div className="p-3 bg-slate-950/20 rounded-xl border border-white/5">
-                      <span className="text-slate-500 block">Fixed Closing Fee</span>
-                      <span className="font-bold text-white mt-0.5 block">₹{calcResult.fixed_closing_fee.toFixed(2)}</span>
+                      <span className="text-slate-500 block">
+                        Fixed Closing Fee
+                      </span>
+                      <span className="font-bold text-white mt-0.5 block">
+                        ₹{calcResult.fixed_closing_fee.toFixed(2)}
+                      </span>
                     </div>
                     <div className="p-3 bg-slate-950/20 rounded-xl border border-white/5">
-                      <span className="text-slate-500 block">Weight Handling Fee</span>
-                      <span className="font-bold text-white mt-0.5 block">₹{calcResult.weight_handling_fee.toFixed(2)}</span>
+                      <span className="text-slate-500 block">
+                        Weight Handling Fee
+                      </span>
+                      <span className="font-bold text-white mt-0.5 block">
+                        ₹{calcResult.weight_handling_fee.toFixed(2)}
+                      </span>
                     </div>
                     <div className="p-3 bg-slate-950/20 rounded-xl border border-white/5">
-                      <span className="text-slate-550 block">Outward GST ({gstPercent}%)</span>
-                      <span className="font-bold text-white mt-0.5 block">₹{calcResult.gst_amount.toFixed(2)}</span>
+                      <span className="text-slate-550 block">
+                        Outward GST ({gstPercent}%)
+                      </span>
+                      <span className="font-bold text-white mt-0.5 block">
+                        ₹{calcResult.gst_amount.toFixed(2)}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -394,18 +504,25 @@ export default function PricingView({ token }: PricingViewProps) {
             </h4>
 
             <div className="space-y-4">
-              {templates.map(t => {
+              {templates.map((t) => {
                 const isEditing = editingTemplateId === t.id;
                 return (
-                  <div key={t.id} className="glass-card p-5 rounded-2xl space-y-3 relative">
+                  <div
+                    key={t.id}
+                    className="glass-card p-5 rounded-2xl space-y-3 relative"
+                  >
                     <div className="flex justify-between items-start">
                       <div>
-                        <h5 className="font-bold text-slate-200">{t.channel_name}</h5>
+                        <h5 className="font-bold text-slate-200">
+                          {t.channel_name}
+                        </h5>
                         {t.is_default && (
-                          <span className="text-[9px] bg-indigo-500/10 text-indigo-700 px-1.5 py-0.5 rounded uppercase font-extrabold mt-1 inline-block">Default</span>
+                          <span className="text-[9px] bg-indigo-500/10 text-indigo-700 px-1.5 py-0.5 rounded uppercase font-extrabold mt-1 inline-block">
+                            Default
+                          </span>
                         )}
                       </div>
-                      
+
                       {!isEditing && (
                         <button
                           onClick={() => handleEditTemplate(t)}
@@ -423,11 +540,15 @@ export default function PricingView({ token }: PricingViewProps) {
                           <input
                             type="number"
                             value={editReferral}
-                            onChange={(e) => setEditReferral(parseFloat(e.target.value) || 0)}
+                            onChange={(e) =>
+                              setEditReferral(parseFloat(e.target.value) || 0)
+                            }
                             className="w-16 bg-slate-900 border border-white/10 rounded px-1.5 py-0.5 text-right text-white"
                           />
                         ) : (
-                          <strong className="text-slate-200">{t.referral_fee_percent}%</strong>
+                          <strong className="text-slate-200">
+                            {t.referral_fee_percent}%
+                          </strong>
                         )}
                       </div>
 
@@ -437,11 +558,15 @@ export default function PricingView({ token }: PricingViewProps) {
                           <input
                             type="number"
                             value={editClosing}
-                            onChange={(e) => setEditClosing(parseFloat(e.target.value) || 0)}
+                            onChange={(e) =>
+                              setEditClosing(parseFloat(e.target.value) || 0)
+                            }
                             className="w-16 bg-slate-900 border border-white/10 rounded px-1.5 py-0.5 text-right text-white"
                           />
                         ) : (
-                          <strong className="text-slate-200">₹{t.fixed_closing_fee}</strong>
+                          <strong className="text-slate-200">
+                            ₹{t.fixed_closing_fee}
+                          </strong>
                         )}
                       </div>
 
@@ -451,11 +576,15 @@ export default function PricingView({ token }: PricingViewProps) {
                           <input
                             type="number"
                             value={editWeight}
-                            onChange={(e) => setEditWeight(parseFloat(e.target.value) || 0)}
+                            onChange={(e) =>
+                              setEditWeight(parseFloat(e.target.value) || 0)
+                            }
                             className="w-16 bg-slate-900 border border-white/10 rounded px-1.5 py-0.5 text-right text-white"
                           />
                         ) : (
-                          <strong className="text-slate-200">₹{t.weight_handling_fee}</strong>
+                          <strong className="text-slate-200">
+                            ₹{t.weight_handling_fee}
+                          </strong>
                         )}
                       </div>
 
@@ -482,7 +611,6 @@ export default function PricingView({ token }: PricingViewProps) {
               })}
             </div>
           </div>
-
         </div>
       )}
     </div>

@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field, computed_field
 from typing import Optional
 from datetime import datetime
 
+
 class InventoryBase(BaseModel):
     warehouse_qty: int = 0
     in_transit_qty: int = 0
@@ -9,6 +10,7 @@ class InventoryBase(BaseModel):
     reorder_level: int = 10
     shelf: Optional[str] = None
     bin: Optional[str] = None
+
 
 class InventoryUpdate(BaseModel):
     warehouse_qty: Optional[int] = None
@@ -18,6 +20,7 @@ class InventoryUpdate(BaseModel):
     shelf: Optional[str] = None
     bin: Optional[str] = None
 
+
 # Minimal Product representation for nested serialization without circular imports
 class ProductSimple(BaseModel):
     id: str
@@ -26,6 +29,7 @@ class ProductSimple(BaseModel):
 
     class Config:
         from_attributes = True
+
 
 class InventoryResponse(InventoryBase):
     id: str
@@ -47,8 +51,10 @@ class StockLogBase(BaseModel):
     quantity: int
     reference: Optional[str] = None
 
+
 class StockLogCreate(StockLogBase):
     pass
+
 
 class StockLogResponse(StockLogBase):
     id: str

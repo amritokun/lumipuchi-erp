@@ -1,7 +1,15 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { RefreshCw, Lock, Unlock, Edit3, Save, TrendingUp, AlertCircle } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import {
+  RefreshCw,
+  Lock,
+  Unlock,
+  Edit3,
+  Save,
+  TrendingUp,
+  AlertCircle,
+} from "lucide-react";
 
 interface ForexRate {
   id: string;
@@ -21,10 +29,10 @@ export default function ForexView({ token }: ForexViewProps) {
   const [rates, setRates] = useState<ForexRate[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editRate, setEditRate] = useState<string>('');
+  const [editRate, setEditRate] = useState<string>("");
   const [updating, setUpdating] = useState<boolean>(false);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
   const fetchRates = async () => {
     try {
@@ -38,7 +46,7 @@ export default function ForexView({ token }: ForexViewProps) {
         setRates(data);
       }
     } catch (err) {
-      console.error('Error fetching forex rates:', err);
+      console.error("Error fetching forex rates:", err);
     } finally {
       setLoading(false);
     }
@@ -51,9 +59,9 @@ export default function ForexView({ token }: ForexViewProps) {
   const handleToggleLock = async (rateObj: ForexRate) => {
     try {
       const res = await fetch(`${API_URL}/forex/${rateObj.from_currency}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
@@ -64,7 +72,7 @@ export default function ForexView({ token }: ForexViewProps) {
         fetchRates();
       }
     } catch (err) {
-      console.error('Error locking rate:', err);
+      console.error("Error locking rate:", err);
     }
   };
 
@@ -72,9 +80,9 @@ export default function ForexView({ token }: ForexViewProps) {
     setUpdating(true);
     try {
       const res = await fetch(`${API_URL}/forex/${rateObj.from_currency}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
@@ -87,7 +95,7 @@ export default function ForexView({ token }: ForexViewProps) {
         fetchRates();
       }
     } catch (err) {
-      console.error('Error saving rate:', err);
+      console.error("Error saving rate:", err);
     } finally {
       setUpdating(false);
     }
@@ -102,14 +110,21 @@ export default function ForexView({ token }: ForexViewProps) {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-primary font-outfit">Forex Command Center</h2>
-          <p className="text-xs text-slate-400">Track and lock exchange rates for importing goods</p>
+          <h2 className="text-2xl font-bold text-primary font-outfit">
+            Forex Command Center
+          </h2>
+          <p className="text-xs text-slate-400">
+            Track and lock exchange rates for importing goods
+          </p>
         </div>
         <button
-          onClick={() => { setLoading(true); fetchRates(); }}
+          onClick={() => {
+            setLoading(true);
+            fetchRates();
+          }}
           className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl transition border border-white/5"
         >
-          <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+          <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
           Refresh Rates
         </button>
       </div>
@@ -117,44 +132,63 @@ export default function ForexView({ token }: ForexViewProps) {
       <div className="p-4 bg-amber-500/10 border border-amber-500/20 text-amber-700 rounded-2xl text-xs flex gap-2.5 items-start">
         <AlertCircle size={16} className="mt-0.5 shrink-0" />
         <div>
-          <span className="font-semibold block mb-0.5">Understanding Rate Locking:</span>
-          Locking a rate prevents background sync jobs from overwriting it. Any manual overrides automatically lock the rate to keep landed cost calculations consistent.
+          <span className="font-semibold block mb-0.5">
+            Understanding Rate Locking:
+          </span>
+          Locking a rate prevents background sync jobs from overwriting it. Any
+          manual overrides automatically lock the rate to keep landed cost
+          calculations consistent.
         </div>
       </div>
 
       {loading ? (
-        <div className="text-center py-10 text-slate-400">Loading exchange rates...</div>
+        <div className="text-center py-10 text-slate-400">
+          Loading exchange rates...
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {rates.map((rateObj) => (
-            <div key={rateObj.id} className="glass-card p-6 rounded-2xl space-y-4">
+            <div
+              key={rateObj.id}
+              className="glass-card p-6 rounded-2xl space-y-4"
+            >
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center font-bold text-primary">
                     {rateObj.from_currency}
                   </div>
                   <div>
-                    <span className="text-xs text-slate-400">Base Currency Pair</span>
-                    <h4 className="text-md font-bold text-white uppercase">{rateObj.from_currency} → {rateObj.to_currency}</h4>
+                    <span className="text-xs text-slate-400">
+                      Base Currency Pair
+                    </span>
+                    <h4 className="text-md font-bold text-white uppercase">
+                      {rateObj.from_currency} → {rateObj.to_currency}
+                    </h4>
                   </div>
                 </div>
 
                 <button
                   onClick={() => handleToggleLock(rateObj)}
                   className={`p-2 rounded-xl border transition ${
-                    rateObj.is_locked 
-                      ? 'bg-amber-500/10 text-amber-600 border-amber-500/20' 
-                      : 'bg-slate-800/60 text-slate-450 border-white/5 hover:text-white'
+                    rateObj.is_locked
+                      ? "bg-amber-500/10 text-amber-600 border-amber-500/20"
+                      : "bg-slate-800/60 text-slate-450 border-white/5 hover:text-white"
                   }`}
                   title={rateObj.is_locked ? "Unlock Rate" : "Lock Rate"}
                 >
-                  {rateObj.is_locked ? <Lock size={16} /> : <Unlock size={16} />}
+                  {rateObj.is_locked ? (
+                    <Lock size={16} />
+                  ) : (
+                    <Unlock size={16} />
+                  )}
                 </button>
               </div>
 
               <div className="flex justify-between items-center py-2 border-y border-white/5">
                 <div>
-                  <span className="text-[10px] uppercase text-slate-450 block">Current Exchange Rate</span>
+                  <span className="text-[10px] uppercase text-slate-450 block">
+                    Current Exchange Rate
+                  </span>
                   {editingId === rateObj.id ? (
                     <input
                       type="number"
@@ -191,9 +225,13 @@ export default function ForexView({ token }: ForexViewProps) {
               </div>
 
               <div className="text-[10px] text-slate-500 flex justify-between">
-                <span>Last Updated: {new Date(rateObj.updated_at).toLocaleString()}</span>
+                <span>
+                  Last Updated: {new Date(rateObj.updated_at).toLocaleString()}
+                </span>
                 {rateObj.manual_override_rate && (
-                  <span className="text-amber-600 font-medium">Manual Override Applied</span>
+                  <span className="text-amber-600 font-medium">
+                    Manual Override Applied
+                  </span>
                 )}
               </div>
             </div>

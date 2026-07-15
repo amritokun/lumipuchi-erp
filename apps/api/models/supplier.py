@@ -1,6 +1,7 @@
 from sqlalchemy import Column, String, Boolean
 from database import Base
 
+
 class Supplier(Base):
     __tablename__ = "suppliers"
 
@@ -11,5 +12,5 @@ class Supplier(Base):
     phone = Column(String, nullable=True)
     address = Column(String, nullable=True)
     country = Column(String, default="China", nullable=False)
-    currency = Column(String, default="CNY", nullable=False) # CNY, USD
+    currency = Column(String, default="CNY", nullable=False)  # CNY, USD
     is_active = Column(Boolean, default=True, nullable=False)

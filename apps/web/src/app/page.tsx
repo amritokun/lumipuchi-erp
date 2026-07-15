@@ -1,26 +1,26 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { calculateChannelPayout, ChannelFees } from '@lumipuchi/pricing-engine';
-import { calculateLandedCost } from '@lumipuchi/forex';
-import { calculateVirtualQty } from '@lumipuchi/inventory';
-import { useAuth } from '@/context/AuthContext';
+import React, { useState } from "react";
+import { calculateChannelPayout, ChannelFees } from "@lumipuchi/pricing-engine";
+import { calculateLandedCost } from "@lumipuchi/forex";
+import { calculateVirtualQty } from "@lumipuchi/inventory";
+import { useAuth } from "@/context/AuthContext";
 
 // Import newly created sub-views
-import SuppliersView from '@/components/SuppliersView';
-import ForexView from '@/components/ForexView';
-import POsView from '@/components/POsView';
-import ProductsView from '@/components/ProductsView';
-import InventoryView from '@/components/InventoryView';
-import PricingView from '@/components/PricingView';
-import OrdersView from '@/components/OrdersView';
+import SuppliersView from "@/components/SuppliersView";
+import ForexView from "@/components/ForexView";
+import POsView from "@/components/POsView";
+import ProductsView from "@/components/ProductsView";
+import InventoryView from "@/components/InventoryView";
+import PricingView from "@/components/PricingView";
+import OrdersView from "@/components/OrdersView";
 
-import { 
-  TrendingUp, 
-  Package, 
-  DollarSign, 
-  Percent, 
-  Layers, 
+import {
+  TrendingUp,
+  Package,
+  DollarSign,
+  Percent,
+  Layers,
   Settings,
   RefreshCw,
   LogOut,
@@ -31,21 +31,29 @@ import {
   Loader2,
   FolderTree,
   Users,
-  ShoppingCart
-} from 'lucide-react';
+  ShoppingCart,
+} from "lucide-react";
 
 export default function Home() {
-  const { user, token, loading, error: authError, login, signup, logout } = useAuth();
+  const {
+    user,
+    token,
+    loading,
+    error: authError,
+    login,
+    signup,
+    logout,
+  } = useAuth();
 
   // Tab Navigation State
-  const [activeTab, setActiveTab] = useState<string>('dashboard');
+  const [activeTab, setActiveTab] = useState<string>("dashboard");
 
   // Auth Form State
   const [isLogin, setIsLogin] = useState<boolean>(true);
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [name, setName] = useState<string>('');
-  const [role, setRole] = useState<string>('viewer');
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [role, setRole] = useState<string>("viewer");
   const [submitting, setSubmitting] = useState<boolean>(false);
 
   // Dashboard Calculator State
@@ -60,7 +68,7 @@ export default function Home() {
     referralFeePercent: 12,
     fixedClosingFee: 40,
     weightHandlingFee: 65,
-    otherFees: 0
+    otherFees: 0,
   };
 
   const handleAuthSubmit = async (e: React.FormEvent) => {
@@ -75,10 +83,20 @@ export default function Home() {
   };
 
   // Landed Cost calculations using our forex package
-  const landedCost = calculateLandedCost(costCny, exchangeRate, dutyPercent, shippingCost);
-  
+  const landedCost = calculateLandedCost(
+    costCny,
+    exchangeRate,
+    dutyPercent,
+    shippingCost,
+  );
+
   // Pricing payout calculations using our pricing engine
-  const pricingResult = calculateChannelPayout(sellingPrice, landedCost, gstPercent, defaultFees);
+  const pricingResult = calculateChannelPayout(
+    sellingPrice,
+    landedCost,
+    gstPercent,
+    defaultFees,
+  );
 
   // Inventory virtual calculation
   const virtualStock = calculateVirtualQty(120, 500, 30);
@@ -88,7 +106,9 @@ export default function Home() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-background">
         <Loader2 className="h-10 w-10 text-primary animate-spin" />
-        <p className="text-slate-400 mt-4 text-sm font-medium">Securing session...</p>
+        <p className="text-slate-400 mt-4 text-sm font-medium">
+          Securing session...
+        </p>
       </div>
     );
   }
@@ -103,7 +123,9 @@ export default function Home() {
               Lumipuchi ERP
             </h1>
             <p className="text-slate-400 text-sm mt-2">
-              {isLogin ? 'Sign in to access your dashboard' : 'Create an account to get started'}
+              {isLogin
+                ? "Sign in to access your dashboard"
+                : "Create an account to get started"}
             </p>
           </div>
 
@@ -187,11 +209,21 @@ export default function Home() {
                     onChange={(e) => setRole(e.target.value)}
                     className="w-full bg-slate-900/60 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm appearance-none"
                   >
-                    <option value="owner" className="bg-slate-950">Owner (Full Access)</option>
-                    <option value="manager" className="bg-slate-950">Manager (Inventory, Pricing)</option>
-                    <option value="warehouse" className="bg-slate-950">Warehouse (Stock Actions)</option>
-                    <option value="finance" className="bg-slate-950">Finance (Costs, GST)</option>
-                    <option value="viewer" className="bg-slate-950">Viewer (Read Only)</option>
+                    <option value="owner" className="bg-slate-950">
+                      Owner (Full Access)
+                    </option>
+                    <option value="manager" className="bg-slate-950">
+                      Manager (Inventory, Pricing)
+                    </option>
+                    <option value="warehouse" className="bg-slate-950">
+                      Warehouse (Stock Actions)
+                    </option>
+                    <option value="finance" className="bg-slate-950">
+                      Finance (Costs, GST)
+                    </option>
+                    <option value="viewer" className="bg-slate-950">
+                      Viewer (Read Only)
+                    </option>
                   </select>
                 </div>
               </div>
@@ -203,7 +235,7 @@ export default function Home() {
               className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-800 text-white font-semibold rounded-xl transition shadow-lg shadow-indigo-650/20 text-sm flex justify-center items-center gap-2"
             >
               {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
-              {isLogin ? 'Sign In' : 'Create Account'}
+              {isLogin ? "Sign In" : "Create Account"}
             </button>
           </form>
 
@@ -212,7 +244,9 @@ export default function Home() {
               onClick={() => setIsLogin(!isLogin)}
               className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold"
             >
-              {isLogin ? "Don't have an account? Sign Up" : 'Already have an account? Sign In'}
+              {isLogin
+                ? "Don't have an account? Sign Up"
+                : "Already have an account? Sign In"}
             </button>
           </div>
         </div>
@@ -230,93 +264,95 @@ export default function Home() {
             <h1 className="text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-500 font-outfit">
               Lumipuchi ERP
             </h1>
-            <p className="text-[10px] text-slate-450 mt-1 uppercase tracking-widest font-semibold">Central Command</p>
+            <p className="text-[10px] text-slate-450 mt-1 uppercase tracking-widest font-semibold">
+              Central Command
+            </p>
           </div>
 
           <nav className="space-y-1">
             <button
-              onClick={() => setActiveTab('dashboard')}
+              onClick={() => setActiveTab("dashboard")}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === 'dashboard'
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                activeTab === "dashboard"
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
               }`}
             >
               <TrendingUp size={16} />
               Overview
             </button>
             <button
-              onClick={() => setActiveTab('suppliers')}
+              onClick={() => setActiveTab("suppliers")}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === 'suppliers'
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                activeTab === "suppliers"
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
               }`}
             >
               <Users size={16} />
               Suppliers
             </button>
             <button
-              onClick={() => setActiveTab('products')}
+              onClick={() => setActiveTab("products")}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === 'products'
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                activeTab === "products"
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
               }`}
             >
               <Package size={16} />
               Products
             </button>
             <button
-              onClick={() => setActiveTab('forex')}
+              onClick={() => setActiveTab("forex")}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === 'forex'
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                activeTab === "forex"
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
               }`}
             >
               <DollarSign size={16} />
               Forex Rates
             </button>
             <button
-              onClick={() => setActiveTab('pos')}
+              onClick={() => setActiveTab("pos")}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === 'pos'
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                activeTab === "pos"
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
               }`}
             >
               <FolderTree size={16} />
               Purchase Orders
             </button>
             <button
-              onClick={() => setActiveTab('inventory')}
+              onClick={() => setActiveTab("inventory")}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === 'inventory'
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                activeTab === "inventory"
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
               }`}
             >
               <Layers size={16} />
               Inventory
             </button>
             <button
-              onClick={() => setActiveTab('pricing-engine')}
+              onClick={() => setActiveTab("pricing-engine")}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === 'pricing-engine'
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                activeTab === "pricing-engine"
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
               }`}
             >
               <Percent size={16} />
               Pricing Engine
             </button>
             <button
-              onClick={() => setActiveTab('orders')}
+              onClick={() => setActiveTab("orders")}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === 'orders'
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                activeTab === "orders"
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
               }`}
             >
               <ShoppingCart size={16} />
@@ -332,8 +368,12 @@ export default function Home() {
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div className="truncate">
-              <span className="text-xs font-semibold text-white block truncate">{user.name}</span>
-              <span className="text-[10px] text-slate-450 uppercase font-bold tracking-wider">{user.role}</span>
+              <span className="text-xs font-semibold text-white block truncate">
+                {user.name}
+              </span>
+              <span className="text-[10px] text-slate-450 uppercase font-bold tracking-wider">
+                {user.role}
+              </span>
             </div>
           </div>
           <button
@@ -349,11 +389,15 @@ export default function Home() {
       {/* Main Content Area */}
       <main className="flex-1 p-6 md:p-10 max-w-5xl overflow-y-auto">
         {/* Render Tab Contents */}
-        {activeTab === 'dashboard' && (
+        {activeTab === "dashboard" && (
           <div className="space-y-10">
             <div>
-              <h2 className="text-3xl font-extrabold text-white font-outfit">Seller Command Center</h2>
-              <p className="text-slate-400 mt-1">Live metrics and channels margin calculators</p>
+              <h2 className="text-3xl font-extrabold text-white font-outfit">
+                Seller Command Center
+              </h2>
+              <p className="text-slate-400 mt-1">
+                Live metrics and channels margin calculators
+              </p>
             </div>
 
             {/* Overview Cards */}
@@ -378,7 +422,9 @@ export default function Home() {
                 <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">
                   Total Inventory (Virtual)
                 </span>
-                <h3 className="text-3xl font-bold font-outfit mt-1">{virtualStock} Units</h3>
+                <h3 className="text-3xl font-bold font-outfit mt-1">
+                  {virtualStock} Units
+                </h3>
                 <p className="text-xs text-purple-600 mt-2 font-medium">
                   Warehouse (120) + In Transit (500) - Reserved (30)
                 </p>
@@ -391,9 +437,12 @@ export default function Home() {
                 <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">
                   Active Forex Standard
                 </span>
-                <h3 className="text-3xl font-bold font-outfit mt-1">₹{exchangeRate} / CNY</h3>
+                <h3 className="text-3xl font-bold font-outfit mt-1">
+                  ₹{exchangeRate} / CNY
+                </h3>
                 <p className="text-xs text-primary mt-2 flex items-center gap-1.5 font-medium">
-                  <RefreshCw size={12} className="animate-spin" /> Live update synced
+                  <RefreshCw size={12} className="animate-spin" /> Live update
+                  synced
                 </p>
               </div>
             </div>
@@ -426,7 +475,9 @@ export default function Home() {
                         type="number"
                         step="0.01"
                         value={exchangeRate}
-                        onChange={(e) => setExchangeRate(Number(e.target.value))}
+                        onChange={(e) =>
+                          setExchangeRate(Number(e.target.value))
+                        }
                         className="w-full bg-slate-900/60 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition"
                       />
                     </div>
@@ -463,7 +514,8 @@ export default function Home() {
                     ₹{landedCost.toFixed(2)}
                   </div>
                   <p className="text-xs text-slate-400 mt-1">
-                    Includes customs duty of ₹{(costCny * exchangeRate * (dutyPercent / 100)).toFixed(2)}
+                    Includes customs duty of ₹
+                    {(costCny * exchangeRate * (dutyPercent / 100)).toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -482,7 +534,9 @@ export default function Home() {
                       <input
                         type="number"
                         value={sellingPrice}
-                        onChange={(e) => setSellingPrice(Number(e.target.value))}
+                        onChange={(e) =>
+                          setSellingPrice(Number(e.target.value))
+                        }
                         className="w-full bg-slate-900/60 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-purple-500 transition"
                       />
                     </div>
@@ -501,12 +555,20 @@ export default function Home() {
 
                   <div className="grid grid-cols-2 gap-4 mt-6">
                     <div className="p-4 bg-slate-950/40 rounded-xl border border-white/5">
-                      <span className="text-xs text-slate-400 block">Total Channel Fees</span>
-                      <span className="text-lg font-bold">₹{pricingResult.totalFees.toFixed(2)}</span>
+                      <span className="text-xs text-slate-400 block">
+                        Total Channel Fees
+                      </span>
+                      <span className="text-lg font-bold">
+                        ₹{pricingResult.totalFees.toFixed(2)}
+                      </span>
                     </div>
                     <div className="p-4 bg-slate-950/40 rounded-xl border border-white/5">
-                      <span className="text-xs text-slate-400 block">GST Paid (Outward)</span>
-                      <span className="text-lg font-bold">₹{pricingResult.gstAmount.toFixed(2)}</span>
+                      <span className="text-xs text-slate-400 block">
+                        GST Paid (Outward)
+                      </span>
+                      <span className="text-lg font-bold">
+                        ₹{pricingResult.gstAmount.toFixed(2)}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -522,7 +584,9 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <span className="text-xs text-slate-400 block">Margin %</span>
+                      <span className="text-xs text-slate-400 block">
+                        Margin %
+                      </span>
                       <span className="text-2xl font-bold text-emerald-600 mt-1">
                         {pricingResult.netMarginPercent.toFixed(1)}%
                       </span>
@@ -535,25 +599,27 @@ export default function Home() {
         )}
 
         {/* Tab 2: Suppliers */}
-        {activeTab === 'suppliers' && token && <SuppliersView token={token} />}
+        {activeTab === "suppliers" && token && <SuppliersView token={token} />}
 
         {/* Tab 3: Products */}
-        {activeTab === 'products' && token && <ProductsView token={token} />}
+        {activeTab === "products" && token && <ProductsView token={token} />}
 
         {/* Tab 4: Forex */}
-        {activeTab === 'forex' && token && <ForexView token={token} />}
+        {activeTab === "forex" && token && <ForexView token={token} />}
 
         {/* Tab 5: POs */}
-        {activeTab === 'pos' && token && <POsView token={token} />}
+        {activeTab === "pos" && token && <POsView token={token} />}
 
         {/* Tab 6: Inventory */}
-        {activeTab === 'inventory' && token && <InventoryView token={token} />}
+        {activeTab === "inventory" && token && <InventoryView token={token} />}
 
         {/* Tab 7: Pricing Engine */}
-        {activeTab === 'pricing-engine' && token && <PricingView token={token} />}
+        {activeTab === "pricing-engine" && token && (
+          <PricingView token={token} />
+        )}
 
         {/* Tab 8: Orders & Returns */}
-        {activeTab === 'orders' && token && <OrdersView token={token} />}
+        {activeTab === "orders" && token && <OrdersView token={token} />}
       </main>
     </div>
   );

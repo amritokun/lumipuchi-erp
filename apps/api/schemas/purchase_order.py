@@ -3,14 +3,17 @@ from typing import List, Optional
 from datetime import datetime
 from schemas.supplier import SupplierResponse
 
+
 class PurchaseOrderItemBase(BaseModel):
     sku: str
     name: str
     quantity: int = Field(..., gt=0)
     unit_cost_foreign: float = Field(..., gt=0)
 
+
 class PurchaseOrderItemCreate(PurchaseOrderItemBase):
     pass
+
 
 class PurchaseOrderItemResponse(PurchaseOrderItemBase):
     id: str
@@ -20,13 +23,14 @@ class PurchaseOrderItemResponse(PurchaseOrderItemBase):
     class Config:
         from_attributes = True
 
+
 class PurchaseOrderBase(BaseModel):
     po_number: str
     supplier_id: str
     status: str = "draft"
     currency: str = "CNY"
     exchange_rate: float
-    
+
     china_domestic_shipping: float = 0.0
     international_freight: float = 0.0
     customs_duty_percent: float = 0.0
@@ -34,8 +38,10 @@ class PurchaseOrderBase(BaseModel):
     insurance: float = 0.0
     other_charges: float = 0.0
 
+
 class PurchaseOrderCreate(PurchaseOrderBase):
     items: List[PurchaseOrderItemCreate]
+
 
 class PurchaseOrderUpdate(BaseModel):
     status: Optional[str] = None
@@ -46,6 +52,7 @@ class PurchaseOrderUpdate(BaseModel):
     clearing_charges: Optional[float] = None
     insurance: Optional[float] = None
     other_charges: Optional[float] = None
+
 
 class PurchaseOrderResponse(PurchaseOrderBase):
     id: str

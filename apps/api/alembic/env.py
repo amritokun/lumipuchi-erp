@@ -7,7 +7,7 @@ from alembic import context
 from dotenv import load_dotenv
 
 # Add project path to sys.path to enable local imports
-sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Load environment variables
 load_dotenv()
@@ -17,7 +17,9 @@ load_dotenv()
 config = context.config
 
 # Dynamically set database URL from environment variable
-db_url = os.getenv("DATABASE_URL", "postgresql://lumipuchi:password123@localhost:5432/lumipuchi_erp")
+db_url = os.getenv(
+    "DATABASE_URL", "postgresql://lumipuchi:password123@localhost:5432/lumipuchi_erp"
+)
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
 config.set_main_option("sqlalchemy.url", db_url)
@@ -38,6 +40,7 @@ from models.inventory import Inventory, StockLog
 from models.pricing import ChannelFeeTemplate
 from models.order import Order, OrderItem
 from models.returns import OrderReturn
+
 target_metadata = Base.metadata
 
 
@@ -85,9 +88,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

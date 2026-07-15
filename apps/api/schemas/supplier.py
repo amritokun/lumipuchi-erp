@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
 
+
 class SupplierBase(BaseModel):
     name: str = Field(..., min_length=2, max_length=100)
     contact_name: Optional[str] = None
@@ -10,12 +11,15 @@ class SupplierBase(BaseModel):
     country: str = "China"
     currency: str = "CNY"
 
+
 class SupplierCreate(SupplierBase):
     pass
+
 
 class SupplierUpdate(SupplierBase):
     name: Optional[str] = None
     is_active: Optional[bool] = None
+
 
 class SupplierResponse(SupplierBase):
     id: str

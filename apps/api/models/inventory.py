@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import Base
 
+
 class Inventory(Base):
     __tablename__ = "inventory"
 
@@ -18,14 +19,17 @@ class Inventory(Base):
     # Relationships
     product = relationship("Product", back_populates="inventory")
 
+
 class StockLog(Base):
     __tablename__ = "stock_logs"
 
     id = Column(String, primary_key=True, index=True)
     product_id = Column(String, ForeignKey("products.id"), nullable=False)
-    log_type = Column(String, nullable=False) # stock_in, stock_out, reserved, returned, damaged, adjustment
-    quantity = Column(Integer, nullable=False) # quantity change
-    reference = Column(String, nullable=True) # e.g. PO number, manual, order id
+    log_type = Column(
+        String, nullable=False
+    )  # stock_in, stock_out, reserved, returned, damaged, adjustment
+    quantity = Column(Integer, nullable=False)  # quantity change
+    reference = Column(String, nullable=True)  # e.g. PO number, manual, order id
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     # Relationships

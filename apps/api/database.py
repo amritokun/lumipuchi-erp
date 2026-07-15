@@ -5,7 +5,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://lumipuchi:password123@localhost:5432/lumipuchi_erp")
+DATABASE_URL = os.getenv(
+    "DATABASE_URL", "postgresql://lumipuchi:password123@localhost:5432/lumipuchi_erp"
+)
 
 # Fix database URL if it uses postgres:// (common in deployment platforms) and switch to postgresql://
 if DATABASE_URL.startswith("postgres://"):
@@ -15,6 +17,7 @@ if DATABASE_URL.startswith("postgres://"):
 engine = create_engine(DATABASE_URL, echo=False)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
+
 
 def get_db():
     db = SessionLocal()

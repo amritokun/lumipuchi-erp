@@ -8,11 +8,14 @@ from models.user import User, UserRole
 
 # Set up test database (SQLite in-memory)
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test_orders.db"
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Create tables
 Base.metadata.create_all(bind=engine)
+
 
 def override_get_db():
     try:
@@ -21,9 +24,11 @@ def override_get_db():
     finally:
         db.close()
 
+
 app.dependency_overrides[get_db] = override_get_db
 
 client = TestClient(app)
+
 
 @pytest.fixture(autouse=True)
 def clean_db():
@@ -32,6 +37,7 @@ def clean_db():
     Base.metadata.create_all(bind=engine)
     yield
 
+
 def get_auth_headers(email: str = "owner@lumipuchi.in", role: str = "owner") -> dict:
     client.post(
         "/auth/signup",
@@ -39,36 +45,38 @@ def get_auth_headers(email: str = "owner@lumipuchi.in", role: str = "owner") -> 
             "email": email,
             "password": "securepassword",
             "name": "Owner Op",
-            "role": role
-        }
+            "role": role,
+        },
     )
     login_response = client.post(
-        "/auth/login",
-        data={"username": email, "password": "securepassword"}
+        "/auth/login", data={"username": email, "password": "securepassword"}
     )
     token = login_response.json()["access_token"]
     return {"Authorization": f"Bearer {token}"}
 
+
 def test_create_order_reserves_inventory():
     headers = get_auth_headers()
-    
+
     # 1. Create supplier and product
-    supplier = client.post("/suppliers", headers=headers, json={"name": "Yiwu Toys D", "currency": "CNY"}).json()
+    supplier = client.post(
+        "/suppliers", headers=headers, json={"name": "Yiwu Toys D", "currency": "CNY"}
+    ).json()
     prod = client.post(
         "/products",
         headers=headers,
         json={
             "sku": "SKU-TOY-D",
             "name": "Teddy Bear D",
-            "supplier_id": supplier["id"]
-        }
+            "supplier_id": supplier["id"],
+        },
     ).json()
 
     # Pre-add 100 units to warehouse
     client.put(
         f"/inventory/{prod['id']}?reference=Initial Count",
         headers=headers,
-        json={"warehouse_qty": 100}
+        json={"warehouse_qty": 100},
     )
 
     # 2. Create Order (status: pending)
@@ -83,9 +91,14 @@ def test_create_order_reserves_inventory():
             "status": "pending",
             "selling_price": 1500.0,
             "items": [
-                {"product_id": prod["id"], "sku": "SKU-TOY-D", "quantity": 10, "unit_price": 150.0}
-            ]
-        }
+                {
+                    "product_id": prod["id"],
+                    "sku": "SKU-TOY-D",
+                    "quantity": 10,
+                    "unit_price": 150.0,
+                }
+            ],
+        },
     )
     assert order_res.status_code == 201
     order = order_res.json()
@@ -102,9 +115,7 @@ def test_create_order_reserves_inventory():
 
     # 3. Transition order status to "shipped"
     update_res = client.put(
-        f"/orders/{order['id']}",
-        headers=headers,
-        json={"status": "shipped"}
+        f"/orders/{order['id']}", headers=headers, json={"status": "shipped"}
     )
     assert update_res.status_code == 200
 
@@ -117,21 +128,29 @@ def test_create_order_reserves_inventory():
 
     # Check stock log registered the shipped deduction (-10)
     logs = client.get("/inventory/logs", headers=headers).json()
-    assert any(log["log_type"] == "stock_out" and log["quantity"] == -10 and "Order Shipped" in log["reference"] for log in logs)
+    assert any(
+        log["log_type"] == "stock_out"
+        and log["quantity"] == -10
+        and "Order Shipped" in log["reference"]
+        for log in logs
+    )
+
 
 def test_order_return_restocking():
     headers = get_auth_headers()
-    
+
     # 1. Create supplier, product and order
-    supplier = client.post("/suppliers", headers=headers, json={"name": "Yiwu Toys E", "currency": "CNY"}).json()
+    supplier = client.post(
+        "/suppliers", headers=headers, json={"name": "Yiwu Toys E", "currency": "CNY"}
+    ).json()
     prod = client.post(
         "/products",
         headers=headers,
         json={
             "sku": "SKU-TOY-E",
             "name": "Teddy Bear E",
-            "supplier_id": supplier["id"]
-        }
+            "supplier_id": supplier["id"],
+        },
     ).json()
 
     # Pre-add 50 units
@@ -147,9 +166,14 @@ def test_order_return_restocking():
             "status": "pending",
             "selling_price": 500.0,
             "items": [
-                {"product_id": prod["id"], "sku": "SKU-TOY-E", "quantity": 5, "unit_price": 100.0}
-            ]
-        }
+                {
+                    "product_id": prod["id"],
+                    "sku": "SKU-TOY-E",
+                    "quantity": 5,
+                    "unit_price": 100.0,
+                }
+            ],
+        },
     ).json()
     client.put(f"/orders/{order['id']}", headers=headers, json={"status": "shipped"})
 
@@ -167,15 +191,20 @@ def test_order_return_restocking():
             "quantity": 2,
             "reason": "customer_return",
             "status": "restocked",
-            "refund_amount": 200.0
-        }
+            "refund_amount": 200.0,
+        },
     )
     assert return_res.status_code == 201
-    
+
     # Verify warehouse_qty increased to 47
     inv = client.get(f"/inventory/{prod['id']}", headers=headers).json()
     assert inv["warehouse_qty"] == 47
 
     # Check logs
     logs = client.get("/inventory/logs", headers=headers).json()
-    assert any(log["log_type"] == "stock_in" and log["quantity"] == 2 and "Return Restocked" in log["reference"] for log in logs)
+    assert any(
+        log["log_type"] == "stock_in"
+        and log["quantity"] == 2
+        and "Return Restocked" in log["reference"]
+        for log in logs
+    )

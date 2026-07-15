@@ -2,14 +2,17 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 from datetime import datetime
 
+
 class OrderItemBase(BaseModel):
     product_id: str
     sku: str
     quantity: int = Field(..., gt=0)
     unit_price: float = Field(..., gt=0.0)
 
+
 class OrderItemCreate(OrderItemBase):
     pass
+
 
 class OrderItemResponse(OrderItemBase):
     id: str
@@ -18,6 +21,7 @@ class OrderItemResponse(OrderItemBase):
     class Config:
         from_attributes = True
 
+
 class OrderBase(BaseModel):
     channel_order_id: str
     channel_name: str
@@ -25,11 +29,14 @@ class OrderBase(BaseModel):
     status: str = "pending"
     selling_price: float
 
+
 class OrderCreate(OrderBase):
     items: List[OrderItemCreate]
 
+
 class OrderUpdate(BaseModel):
     status: Optional[str] = None
+
 
 class OrderResponse(OrderBase):
     id: str

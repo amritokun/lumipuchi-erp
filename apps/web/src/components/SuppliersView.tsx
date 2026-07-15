@@ -1,8 +1,16 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Plus, User, Mail, Phone, MapPin, Globe, CreditCard } from 'lucide-react';
-import { Supplier } from '@lumipuchi/shared';
+import React, { useState, useEffect } from "react";
+import {
+  Plus,
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Globe,
+  CreditCard,
+} from "lucide-react";
+import { Supplier } from "@lumipuchi/shared";
 
 interface SuppliersViewProps {
   token: string;
@@ -11,17 +19,17 @@ interface SuppliersViewProps {
 export default function SuppliersView({ token }: SuppliersViewProps) {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [showAddForm, setShowAddForm] = useState<boolean>(false);
-  const [name, setName] = useState<string>('');
-  const [contactName, setContactName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
-  const [address, setAddress] = useState<string>('');
-  const [country, setCountry] = useState<string>('China');
-  const [currency, setCurrency] = useState<string>('CNY');
+  const [name, setName] = useState<string>("");
+  const [contactName, setContactName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [country, setCountry] = useState<string>("China");
+  const [currency, setCurrency] = useState<string>("CNY");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
   const fetchSuppliers = async () => {
     try {
@@ -35,7 +43,7 @@ export default function SuppliersView({ token }: SuppliersViewProps) {
         setSuppliers(data);
       }
     } catch (err) {
-      console.error('Error fetching suppliers:', err);
+      console.error("Error fetching suppliers:", err);
     } finally {
       setLoading(false);
     }
@@ -50,9 +58,9 @@ export default function SuppliersView({ token }: SuppliersViewProps) {
     setError(null);
     try {
       const res = await fetch(`${API_URL}/suppliers`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
@@ -67,21 +75,21 @@ export default function SuppliersView({ token }: SuppliersViewProps) {
       });
 
       if (res.ok) {
-        setName('');
-        setContactName('');
-        setEmail('');
-        setPhone('');
-        setAddress('');
-        setCountry('China');
-        setCurrency('CNY');
+        setName("");
+        setContactName("");
+        setEmail("");
+        setPhone("");
+        setAddress("");
+        setCountry("China");
+        setCurrency("CNY");
         setShowAddForm(false);
         fetchSuppliers();
       } else {
         const data = await res.json();
-        setError(data.detail || 'Failed to create supplier.');
+        setError(data.detail || "Failed to create supplier.");
       }
     } catch (err) {
-      setError('Network error occurred.');
+      setError("Network error occurred.");
     }
   };
 
@@ -89,22 +97,31 @@ export default function SuppliersView({ token }: SuppliersViewProps) {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-primary font-outfit">Suppliers Directory</h2>
-          <p className="text-xs text-slate-400">Manage Chinese and international suppliers</p>
+          <h2 className="text-2xl font-bold text-primary font-outfit">
+            Suppliers Directory
+          </h2>
+          <p className="text-xs text-slate-400">
+            Manage Chinese and international suppliers
+          </p>
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
           className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl transition shadow-lg shadow-indigo-650/20"
         >
           <Plus size={16} />
-          {showAddForm ? 'Cancel' : 'Add Supplier'}
+          {showAddForm ? "Cancel" : "Add Supplier"}
         </button>
       </div>
 
       {showAddForm && (
-        <form onSubmit={handleSubmit} className="glass-panel p-6 rounded-2xl space-y-4">
-          <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider">New Supplier Details</h3>
-          
+        <form
+          onSubmit={handleSubmit}
+          className="glass-panel p-6 rounded-2xl space-y-4"
+        >
+          <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider">
+            New Supplier Details
+          </h3>
+
           {error && (
             <div className="p-3 bg-rose-500/10 border border-rose-500/20 text-rose-450 rounded-xl text-xs font-semibold">
               {error}
@@ -113,7 +130,9 @@ export default function SuppliersView({ token }: SuppliersViewProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-450 mb-1">Company Name *</label>
+              <label className="block text-xs font-medium text-slate-450 mb-1">
+                Company Name *
+              </label>
               <input
                 type="text"
                 required
@@ -124,7 +143,9 @@ export default function SuppliersView({ token }: SuppliersViewProps) {
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-450 mb-1">Contact Person</label>
+              <label className="block text-xs font-medium text-slate-450 mb-1">
+                Contact Person
+              </label>
               <input
                 type="text"
                 value={contactName}
@@ -137,7 +158,9 @@ export default function SuppliersView({ token }: SuppliersViewProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-450 mb-1">Email</label>
+              <label className="block text-xs font-medium text-slate-450 mb-1">
+                Email
+              </label>
               <input
                 type="email"
                 value={email}
@@ -147,7 +170,9 @@ export default function SuppliersView({ token }: SuppliersViewProps) {
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-450 mb-1">Phone</label>
+              <label className="block text-xs font-medium text-slate-450 mb-1">
+                Phone
+              </label>
               <input
                 type="text"
                 value={phone}
@@ -160,7 +185,9 @@ export default function SuppliersView({ token }: SuppliersViewProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-450 mb-1">Country</label>
+              <label className="block text-xs font-medium text-slate-450 mb-1">
+                Country
+              </label>
               <input
                 type="text"
                 value={country}
@@ -170,22 +197,34 @@ export default function SuppliersView({ token }: SuppliersViewProps) {
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-450 mb-1">Primary Currency</label>
+              <label className="block text-xs font-medium text-slate-450 mb-1">
+                Primary Currency
+              </label>
               <select
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
                 className="w-full bg-slate-900/60 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm appearance-none"
               >
-                <option value="CNY" className="bg-slate-950">CNY (Chinese Yuan)</option>
-                <option value="USD" className="bg-slate-950">USD (US Dollar)</option>
-                <option value="EUR" className="bg-slate-950">EUR (Euro)</option>
-                <option value="INR" className="bg-slate-950">INR (Indian Rupee)</option>
+                <option value="CNY" className="bg-slate-950">
+                  CNY (Chinese Yuan)
+                </option>
+                <option value="USD" className="bg-slate-950">
+                  USD (US Dollar)
+                </option>
+                <option value="EUR" className="bg-slate-950">
+                  EUR (Euro)
+                </option>
+                <option value="INR" className="bg-slate-950">
+                  INR (Indian Rupee)
+                </option>
               </select>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-450 mb-1">Company Address</label>
+            <label className="block text-xs font-medium text-slate-450 mb-1">
+              Company Address
+            </label>
             <textarea
               value={address}
               onChange={(e) => setAddress(e.target.value)}
@@ -205,7 +244,9 @@ export default function SuppliersView({ token }: SuppliersViewProps) {
       )}
 
       {loading ? (
-        <div className="text-center py-10 text-slate-400">Loading suppliers...</div>
+        <div className="text-center py-10 text-slate-400">
+          Loading suppliers...
+        </div>
       ) : suppliers.length === 0 ? (
         <div className="glass-panel text-center py-12 rounded-2xl text-slate-400">
           No suppliers configured. Click "Add Supplier" to register one.
@@ -213,10 +254,15 @@ export default function SuppliersView({ token }: SuppliersViewProps) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {suppliers.map((supplier) => (
-            <div key={supplier.id} className="glass-card p-6 rounded-2xl space-y-4">
+            <div
+              key={supplier.id}
+              className="glass-card p-6 rounded-2xl space-y-4"
+            >
               <div className="flex justify-between items-start">
                 <div>
-                  <h4 className="text-lg font-bold text-white font-outfit">{supplier.name}</h4>
+                  <h4 className="text-lg font-bold text-white font-outfit">
+                    {supplier.name}
+                  </h4>
                   {supplier.contact_name && (
                     <span className="text-xs text-slate-400 flex items-center gap-1.5 mt-1">
                       <User size={12} /> Contact: {supplier.contact_name}
@@ -227,12 +273,14 @@ export default function SuppliersView({ token }: SuppliersViewProps) {
                   <span className="px-2 py-0.5 bg-indigo-500/10 text-indigo-700 text-[10px] font-bold rounded border border-indigo-500/20 uppercase">
                     {supplier.currency}
                   </span>
-                  <span className={`px-2 py-0.5 text-[10px] font-bold rounded border uppercase ${
-                    supplier.is_active 
-                      ? 'bg-emerald-500/10 text-emerald-450 border-emerald-500/20' 
-                      : 'bg-slate-500/10 text-slate-400 border-slate-500/20'
-                  }`}>
-                    {supplier.is_active ? 'Active' : 'Inactive'}
+                  <span
+                    className={`px-2 py-0.5 text-[10px] font-bold rounded border uppercase ${
+                      supplier.is_active
+                        ? "bg-emerald-500/10 text-emerald-450 border-emerald-500/20"
+                        : "bg-slate-500/10 text-slate-400 border-slate-500/20"
+                    }`}
+                  >
+                    {supplier.is_active ? "Active" : "Inactive"}
                   </span>
                 </div>
               </div>

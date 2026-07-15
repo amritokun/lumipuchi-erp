@@ -3,47 +3,40 @@
 @tailwind utilities;
 
 :root {
-  --background: #0b0f19;
-  --foreground: #f8fafc;
-  --primary: #D13670;
+  --background: #fdfbf7;
+  --foreground: #111827;
+  --primary: #d6336c;
   --primary-foreground: #ffffff;
-  --card: rgba(17, 24, 39, 0.7);
-  --card-foreground: #f1f5f9;
-  --muted: #475569;
-  --muted-foreground: #94a3b8;
-  --border: rgba(255, 255, 255, 0.08);
+  --card: #ffffff;
+  --card-foreground: #111827;
+  --muted: #f3f4f6;
+  --muted-foreground: #6b7280;
+  --border: rgba(0, 0, 0, 0.1);
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'Inter', system-ui, sans-serif;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(209, 54, 112, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(182, 91, 136, 0.15) 0px, transparent 50%);
-  background-attachment: fixed;
   min-height: 100vh;
 }
 
-/* Glassmorphism utility */
+/* Fast light cards (removed heavy blur for performance) */
 .glass-panel {
-  background: rgba(17, 24, 39, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: #ffffff;
   border: 1px solid var(--border);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
 
 .glass-card {
-  background: rgba(30, 41, 59, 0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: #ffffff;
   border: 1px solid var(--border);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
 }
 
 .glass-card:hover {
-  background: rgba(30, 41, 59, 0.6);
-  border-color: rgba(209, 54, 112, 0.3);
+  border-color: rgba(214, 51, 108, 0.4);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
   transform: translateY(-2px);
 }

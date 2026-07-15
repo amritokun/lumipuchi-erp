@@ -89,7 +89,7 @@ export default function SuppliersView({ token }: SuppliersViewProps) {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-indigo-200 font-outfit">Suppliers Directory</h2>
+          <h2 className="text-2xl font-bold text-primary font-outfit">Suppliers Directory</h2>
           <p className="text-xs text-slate-400">Manage Chinese and international suppliers</p>
         </div>
         <button
@@ -224,7 +224,7 @@ export default function SuppliersView({ token }: SuppliersViewProps) {
                   )}
                 </div>
                 <div className="flex gap-2">
-                  <span className="px-2 py-0.5 bg-indigo-500/10 text-indigo-300 text-[10px] font-bold rounded border border-indigo-500/20 uppercase">
+                  <span className="px-2 py-0.5 bg-indigo-500/10 text-indigo-700 text-[10px] font-bold rounded border border-indigo-500/20 uppercase">
                     {supplier.currency}
                   </span>
                   <span className={`px-2 py-0.5 text-[10px] font-bold rounded border uppercase ${

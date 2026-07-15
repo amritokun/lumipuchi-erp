@@ -144,7 +144,7 @@ export default function ProductsView({ token }: ProductsViewProps) {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-indigo-200 font-outfit">Product Master Catalog</h2>
+          <h2 className="text-2xl font-bold text-primary font-outfit">Product Master Catalog</h2>
           <p className="text-xs text-slate-400">Manage seller inventory catalog, SKUs, and specifications</p>
         </div>
         <button
@@ -161,7 +161,7 @@ export default function ProductsView({ token }: ProductsViewProps) {
           <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider">New Product Master SKU</h3>
           
           {error && (
-            <div className="p-3 bg-rose-500/10 border border-rose-500/20 text-rose-455 rounded-xl text-xs font-semibold">
+            <div className="p-3 bg-rose-500/10 border border-rose-500/20 text-rose-600 rounded-xl text-xs font-semibold">
               {error}
             </div>
           )}

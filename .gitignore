@@ -29,6 +29,7 @@ env/
 # Operating System Files
 .DS_Store
 Thumbs.db
+*.db
 
 # Docker volumes / data
 pgdata/

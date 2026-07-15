@@ -102,7 +102,7 @@ export default function ForexView({ token }: ForexViewProps) {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-indigo-200 font-outfit">Forex Command Center</h2>
+          <h2 className="text-2xl font-bold text-primary font-outfit">Forex Command Center</h2>
           <p className="text-xs text-slate-400">Track and lock exchange rates for importing goods</p>
         </div>
         <button
@@ -114,7 +114,7 @@ export default function ForexView({ token }: ForexViewProps) {
         </button>
       </div>
 
-      <div className="p-4 bg-amber-500/10 border border-amber-500/20 text-amber-300 rounded-2xl text-xs flex gap-2.5 items-start">
+      <div className="p-4 bg-amber-500/10 border border-amber-500/20 text-amber-700 rounded-2xl text-xs flex gap-2.5 items-start">
         <AlertCircle size={16} className="mt-0.5 shrink-0" />
         <div>
           <span className="font-semibold block mb-0.5">Understanding Rate Locking:</span>
@@ -130,7 +130,7 @@ export default function ForexView({ token }: ForexViewProps) {
             <div key={rateObj.id} className="glass-card p-6 rounded-2xl space-y-4">
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center font-bold text-indigo-300">
+                  <div className="h-10 w-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center font-bold text-primary">
                     {rateObj.from_currency}
                   </div>
                   <div>
@@ -143,7 +143,7 @@ export default function ForexView({ token }: ForexViewProps) {
                   onClick={() => handleToggleLock(rateObj)}
                   className={`p-2 rounded-xl border transition ${
                     rateObj.is_locked 
-                      ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' 
+                      ? 'bg-amber-500/10 text-amber-600 border-amber-500/20' 
                       : 'bg-slate-800/60 text-slate-450 border-white/5 hover:text-white'
                   }`}
                   title={rateObj.is_locked ? "Unlock Rate" : "Lock Rate"}
@@ -193,7 +193,7 @@ export default function ForexView({ token }: ForexViewProps) {
               <div className="text-[10px] text-slate-500 flex justify-between">
                 <span>Last Updated: {new Date(rateObj.updated_at).toLocaleString()}</span>
                 {rateObj.manual_override_rate && (
-                  <span className="text-amber-450 font-medium">Manual Override Applied</span>
+                  <span className="text-amber-600 font-medium">Manual Override Applied</span>
                 )}
               </div>
             </div>

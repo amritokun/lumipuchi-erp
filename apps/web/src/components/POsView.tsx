@@ -209,9 +209,9 @@ export default function POsView({ token }: POsViewProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'draft': return 'bg-slate-500/10 text-slate-400 border-slate-500/20';
-      case 'ordered': return 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20';
+      case 'ordered': return 'bg-indigo-500/10 text-indigo-600 border-indigo-500/20';
       case 'shipped': return 'bg-sky-500/10 text-sky-400 border-sky-500/20';
-      case 'customs': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+      case 'customs': return 'bg-amber-500/10 text-amber-600 border-amber-500/20';
       case 'delivered': return 'bg-emerald-500/10 text-emerald-450 border-emerald-500/20';
       default: return 'bg-rose-500/10 text-rose-450 border-rose-500/20';
     }
@@ -221,7 +221,7 @@ export default function POsView({ token }: POsViewProps) {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-indigo-200 font-outfit">Purchase Orders (POs)</h2>
+          <h2 className="text-2xl font-bold text-primary font-outfit">Purchase Orders (POs)</h2>
           <p className="text-xs text-slate-400">Calculate accurate landed cost and track foreign purchases</p>
         </div>
         <button
@@ -360,7 +360,7 @@ export default function POsView({ token }: POsViewProps) {
               <button
                 type="button"
                 onClick={handleAddItemRow}
-                className="flex items-center gap-1 text-[11px] text-indigo-400 hover:text-indigo-300 font-semibold"
+                className="flex items-center gap-1 text-[11px] text-indigo-600 hover:text-indigo-700 font-semibold"
               >
                 <Plus size={14} /> Add Item Row
               </button>
@@ -416,7 +416,7 @@ export default function POsView({ token }: POsViewProps) {
                     type="button"
                     onClick={() => handleRemoveItemRow(idx)}
                     disabled={items.length === 1}
-                    className="p-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 disabled:opacity-40 rounded-xl border border-rose-500/20 transition h-9 shrink-0 flex items-center justify-center"
+                    className="p-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 disabled:opacity-40 rounded-xl border border-rose-500/20 transition h-9 shrink-0 flex items-center justify-center"
                   >
                     <Trash2 size={14} />
                   </button>
@@ -471,7 +471,7 @@ export default function POsView({ token }: POsViewProps) {
                   </div>
                   <div>
                     <span className="text-[9px] uppercase text-slate-500 block">Total Landed Cost</span>
-                    <span className="text-indigo-300 font-bold mt-0.5">₹{po.total_landed_cost_inr.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
+                    <span className="text-indigo-700 font-bold mt-0.5">₹{po.total_landed_cost_inr.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
                   </div>
                   <div className="flex items-center">
                     <span className={`px-2.5 py-0.5 text-[9px] font-bold rounded-full border uppercase ${getStatusColor(po.status)}`}>
@@ -507,7 +507,7 @@ export default function POsView({ token }: POsViewProps) {
                       <span className="font-bold text-white mt-1 block">₹{(po.china_domestic_shipping + po.clearing_charges + po.insurance + po.other_charges).toLocaleString()}</span>
                     </div>
                     <div className="p-3 bg-indigo-500/10 rounded-xl border border-indigo-500/20 col-span-2 md:col-span-1">
-                      <span className="text-indigo-300 font-semibold block">Landed Cost INR</span>
+                      <span className="text-indigo-700 font-semibold block">Landed Cost INR</span>
                       <span className="font-extrabold text-white text-sm mt-1 block">₹{po.total_landed_cost_inr.toLocaleString()}</span>
                     </div>
                   </div>
@@ -526,7 +526,7 @@ export default function POsView({ token }: POsViewProps) {
                             <th className="p-3 text-right">Quantity</th>
                             <th className="p-3 text-right">Unit Ex-Factory ({po.currency})</th>
                             <th className="p-3 text-right">Unit Raw (INR)</th>
-                            <th className="p-3 text-right bg-indigo-500/5 text-indigo-300">Unit Landed Cost (INR)</th>
+                            <th className="p-3 text-right bg-indigo-500/5 text-indigo-700">Unit Landed Cost (INR)</th>
                             <th className="p-3 text-right">Total Landed (INR)</th>
                           </tr>
                         </thead>
@@ -536,12 +536,12 @@ export default function POsView({ token }: POsViewProps) {
                             const landedCost = item.landed_cost_inr_per_unit || 0;
                             return (
                               <tr key={idx} className="hover:bg-white/5">
-                                <td className="p-3 font-semibold text-indigo-200">{item.sku}</td>
+                                <td className="p-3 font-semibold text-primary">{item.sku}</td>
                                 <td className="p-3 font-medium">{item.name}</td>
                                 <td className="p-3 text-right">{item.quantity}</td>
                                 <td className="p-3 text-right">{po.currency} {item.unit_cost_foreign.toFixed(2)}</td>
                                 <td className="p-3 text-right">₹{rawInr.toFixed(2)}</td>
-                                <td className="p-3 text-right bg-indigo-500/5 text-indigo-300 font-bold">₹{landedCost.toFixed(2)}</td>
+                                <td className="p-3 text-right bg-indigo-500/5 text-indigo-700 font-bold">₹{landedCost.toFixed(2)}</td>
                                 <td className="p-3 text-right font-medium">₹{(landedCost * item.quantity).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                               </tr>
                             );

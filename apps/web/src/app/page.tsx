@@ -86,8 +86,8 @@ export default function Home() {
   // 1. Loading Screen
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#0b0f19]">
-        <Loader2 className="h-10 w-10 text-indigo-500 animate-spin" />
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+        <Loader2 className="h-10 w-10 text-primary animate-spin" />
         <p className="text-slate-400 mt-4 text-sm font-medium">Securing session...</p>
       </div>
     );
@@ -222,7 +222,7 @@ export default function Home() {
 
   // 3. Dashboard Container (Authenticated)
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-[#0b0f19]">
+    <div className="min-h-screen flex flex-col md:flex-row bg-background text-foreground">
       {/* Sidebar Navigation */}
       <aside className="w-full md:w-64 border-r border-white/10 p-6 flex flex-col justify-between bg-slate-950/20 shrink-0">
         <div className="space-y-8">
@@ -365,8 +365,8 @@ export default function Home() {
                 <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">
                   China Sourced Catalog
                 </span>
-                <h3 className="text-3xl font-bold font-outfit mt-1">1,248 Units</h3>
-                <p className="text-xs text-indigo-300 mt-2 flex items-center gap-1">
+                <h3 className="text-3xl font-bold font-outfit mt-1">2,408</h3>
+                <p className="text-xs text-indigo-600 mt-2 flex items-center gap-1.5 font-medium">
                   <TrendingUp size={14} /> Active SKU count
                 </p>
               </div>
@@ -379,7 +379,7 @@ export default function Home() {
                   Total Inventory (Virtual)
                 </span>
                 <h3 className="text-3xl font-bold font-outfit mt-1">{virtualStock} Units</h3>
-                <p className="text-xs text-purple-300 mt-2">
+                <p className="text-xs text-purple-600 mt-2 font-medium">
                   Warehouse (120) + In Transit (500) - Reserved (30)
                 </p>
               </div>
@@ -392,7 +392,7 @@ export default function Home() {
                   Active Forex Standard
                 </span>
                 <h3 className="text-3xl font-bold font-outfit mt-1">₹{exchangeRate} / CNY</h3>
-                <p className="text-xs text-pink-300 mt-2 flex items-center gap-1.5">
+                <p className="text-xs text-primary mt-2 flex items-center gap-1.5 font-medium">
                   <RefreshCw size={12} className="animate-spin" /> Live update synced
                 </p>
               </div>
@@ -402,7 +402,7 @@ export default function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Landed Cost Inputs & Output */}
               <div className="glass-panel p-8 rounded-2xl">
-                <h2 className="text-2xl font-bold font-outfit mb-6 text-indigo-200 flex items-center gap-2">
+                <h2 className="text-2xl font-bold font-outfit mb-6 text-indigo-600 flex items-center gap-2">
                   <Settings size={20} /> Landed Cost Calculator
                 </h2>
                 <div className="space-y-4">
@@ -456,7 +456,7 @@ export default function Home() {
                 </div>
 
                 <div className="mt-8 p-5 bg-indigo-500/10 rounded-xl border border-indigo-500/20">
-                  <span className="text-xs text-indigo-300 font-semibold uppercase tracking-wider block">
+                  <span className="text-xs text-indigo-600 font-semibold uppercase tracking-wider block">
                     Calculated Landed Cost (INR)
                   </span>
                   <div className="text-3xl font-extrabold text-white mt-1">
@@ -471,7 +471,7 @@ export default function Home() {
               {/* Pricing Payout Outputs */}
               <div className="glass-panel p-8 rounded-2xl flex flex-col justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold font-outfit mb-6 text-purple-200 flex items-center gap-2">
+                  <h2 className="text-2xl font-bold font-outfit mb-6 text-purple-600 flex items-center gap-2">
                     <Percent size={20} /> Listing Price & Profitability
                   </h2>
                   <div className="space-y-4">
@@ -514,7 +514,7 @@ export default function Home() {
                 <div className="mt-8 p-5 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
                   <div className="flex justify-between items-center">
                     <div>
-                      <span className="text-xs text-emerald-300 font-semibold uppercase tracking-wider block">
+                      <span className="text-xs text-emerald-700 font-semibold uppercase tracking-wider block">
                         Net Profit Margin
                       </span>
                       <div className="text-3xl font-extrabold text-white mt-1">
@@ -523,7 +523,7 @@ export default function Home() {
                     </div>
                     <div className="text-right">
                       <span className="text-xs text-slate-400 block">Margin %</span>
-                      <span className="text-2xl font-bold text-emerald-400 mt-1">
+                      <span className="text-2xl font-bold text-emerald-600 mt-1">
                         {pricingResult.netMarginPercent.toFixed(1)}%
                       </span>
                     </div>

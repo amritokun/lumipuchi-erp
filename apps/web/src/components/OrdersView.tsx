@@ -228,7 +228,7 @@ export default function OrdersView({ token }: OrdersViewProps) {
       {/* Header with Sync Trigger */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-indigo-200 font-outfit">Orders & Returns Syncing</h2>
+          <h2 className="text-2xl font-bold text-primary font-outfit">Orders & Returns Syncing</h2>
           <p className="text-xs text-slate-400 font-medium">Automatic marketplace channel API data pulling and stock allocation reservation</p>
         </div>
 
@@ -276,7 +276,7 @@ export default function OrdersView({ token }: OrdersViewProps) {
             <div className="glass-panel p-5 rounded-2xl">
               <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block">Net Profit</span>
               <div className="flex items-baseline gap-1 mt-1">
-                <span className={`text-2xl font-extrabold ${totalProfit >= 0 ? 'text-emerald-400' : 'text-rose-455'}`}>
+                <span className={`text-2xl font-extrabold ${totalProfit >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
                   ₹{totalProfit.toLocaleString('en-IN')}
                 </span>
                 <span className={`text-xs font-bold ${totalProfit >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
@@ -325,7 +325,7 @@ export default function OrdersView({ token }: OrdersViewProps) {
                       orders.map(o => (
                         <tr key={o.id} className="hover:bg-white/5 transition">
                           <td className="p-3.5">
-                            <span className="font-bold text-indigo-300 bg-indigo-500/5 px-1.5 py-0.5 rounded border border-indigo-550/15">{o.channel_order_id}</span>
+                            <span className="font-bold text-indigo-700 bg-indigo-500/5 px-1.5 py-0.5 rounded border border-indigo-550/15">{o.channel_order_id}</span>
                             <span className="block text-slate-350 mt-1 truncate font-medium">{o.customer_name || 'Customer'}</span>
                             <span className="block text-[9px] text-slate-500 mt-0.5">{o.channel_name}</span>
                           </td>
@@ -340,16 +340,16 @@ export default function OrdersView({ token }: OrdersViewProps) {
                             <span className="block text-[9px] text-slate-500 mt-0.5">Fees: ₹{(o.selling_price - o.payout_amount).toFixed(0)}</span>
                           </td>
                           <td className="p-3.5 text-center font-bold">
-                            <span className={o.profit_margin >= 0 ? 'text-emerald-400' : 'text-rose-455'}>
+                            <span className={o.profit_margin >= 0 ? 'text-emerald-600' : 'text-rose-600'}>
                               ₹{o.profit_margin.toFixed(2)}
                             </span>
                           </td>
                           <td className="p-3.5 text-center">
                             <span className={`px-2 py-0.5 text-[9px] font-bold rounded uppercase border ${
-                              o.status === 'delivered' ? 'bg-emerald-500/5 text-emerald-400 border-emerald-500/10' :
-                              o.status === 'shipped' ? 'bg-indigo-500/5 text-indigo-400 border-indigo-500/10' :
+                              o.status === 'delivered' ? 'bg-emerald-500/5 text-emerald-600 border-emerald-500/10' :
+                              o.status === 'shipped' ? 'bg-indigo-500/5 text-indigo-600 border-indigo-500/10' :
                               o.status === 'cancelled' ? 'bg-slate-800 text-slate-500 border-white/5' :
-                              'bg-amber-500/5 text-amber-400 border-amber-500/10'
+                              'bg-amber-500/5 text-amber-600 border-amber-500/10'
                             }`}>
                               {o.status}
                             </span>
@@ -397,11 +397,11 @@ export default function OrdersView({ token }: OrdersViewProps) {
                     <div key={r.id} className="glass-card p-4 rounded-xl border border-white/5 space-y-3">
                       <div className="flex justify-between items-start">
                         <div>
-                          <span className="text-[10px] text-indigo-400 font-bold block">{r.sku}</span>
+                          <span className="text-[10px] text-indigo-600 font-bold block">{r.sku}</span>
                           <span className="text-[9px] text-slate-500">Qty: {r.quantity} | Reason: {r.reason || 'N/A'}</span>
                         </div>
                         <span className={`px-2 py-0.5 text-[9px] font-bold rounded uppercase border ${
-                          r.status === 'restocked' ? 'bg-emerald-500/5 text-emerald-400 border-emerald-500/10' : 'bg-rose-500/5 text-rose-455 border-rose-500/10'
+                          r.status === 'restocked' ? 'bg-emerald-500/5 text-emerald-600 border-emerald-500/10' : 'bg-rose-500/5 text-rose-600 border-rose-500/10'
                         }`}>
                           {r.status}
                         </span>

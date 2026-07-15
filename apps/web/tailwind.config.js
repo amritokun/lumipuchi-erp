@@ -23,27 +23,42 @@ module.exports = {
           foreground: "var(--muted-foreground)",
         },
         border: "var(--border)",
+        white: "#111827", // Invert text-white to dark gray for light theme
+        slate: {
+          50: "#000000",
+          100: "#111827",
+          200: "#1f2937",
+          300: "#374151",
+          400: "#4b5563",
+          450: "#6b7280",
+          500: "#9ca3af",
+          600: "#d1d5db",
+          700: "#e5e7eb",
+          800: "#f3f4f6",
+          900: "#ffffff", // Make bg-slate-900 pure white for light theme cards
+          950: "#fdfbf7", // Make bg-slate-950 match cream background
+        },
         // Theme override: Map indigo and purple to custom rose/pink shades from the brand asset
         indigo: {
-          50: "#fff1f2",
-          100: "#ffe4e6",
-          200: "#fecdd3",
-          300: "#fda4af",
-          400: "#fb7185",
-          450: "#e11d48", // Custom accent shade
-          500: "#d13670", // Core brand rose/pink from logo
-          550: "#be123c",
-          600: "#be123c", // Primary brand button color
-          650: "#9f1239", // Deep rose/magenta
+          50: "#fdf2f8",
+          100: "#fce7f3",
+          200: "#fbcfe8",
+          300: "#f9a8d4",
+          400: "#b24e83", // Muted pink from logo
+          450: "#d6336c", // Vibrant brand pink
+          500: "#d6336c", // Core brand rose/pink from logo
+          550: "#c22c60",
+          600: "#d6336c", // Primary brand button color (exact match)
+          650: "#b24e83", // Deep rose/magenta from logo
           700: "#9f1239",
           800: "#880525",
           900: "#4c0519",
           950: "#1e0108",
         },
         purple: {
-          400: "#f472b6",
-          500: "#db2777",
-          600: "#c2185b",
+          400: "#b24e83",
+          500: "#d6336c",
+          600: "#c22c60",
         }
       },
     },

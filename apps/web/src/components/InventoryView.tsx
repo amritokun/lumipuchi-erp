@@ -123,7 +123,7 @@ export default function InventoryView({ token }: InventoryViewProps) {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-indigo-200 font-outfit">Virtual Stock & Warehouse Inventory</h2>
+        <h2 className="text-2xl font-bold text-primary font-outfit">Virtual Stock & Warehouse Inventory</h2>
         <p className="text-xs text-slate-400">Physical levels, in-transit shipping reserves, and stock adjustments logs</p>
       </div>
 
@@ -135,7 +135,7 @@ export default function InventoryView({ token }: InventoryViewProps) {
           </h3>
 
           {error && (
-            <div className="p-3 bg-rose-500/10 border border-rose-500/20 text-rose-455 rounded-xl text-xs">
+            <div className="p-3 bg-rose-500/10 border border-rose-500/20 text-rose-600 rounded-xl text-xs">
               {error}
             </div>
           )}
@@ -201,7 +201,7 @@ export default function InventoryView({ token }: InventoryViewProps) {
                     <th className="p-3.5 text-center">Warehouse</th>
                     <th className="p-3.5 text-center">In Transit</th>
                     <th className="p-3.5 text-center">Allocated</th>
-                    <th className="p-3.5 text-center bg-indigo-500/5 text-indigo-300">Virtual Qty</th>
+                    <th className="p-3.5 text-center bg-indigo-500/5 text-indigo-700">Virtual Qty</th>
                     <th className="p-3.5">Location</th>
                     <th className="p-3.5 text-center">Actions</th>
                   </tr>
@@ -212,7 +212,7 @@ export default function InventoryView({ token }: InventoryViewProps) {
                     return (
                       <tr key={item.id} className="hover:bg-white/5 transition">
                         <td className="p-3.5 max-w-[200px]">
-                          <span className="font-bold text-indigo-300 bg-indigo-500/5 px-1.5 py-0.5 rounded border border-indigo-550/15">{item.product.sku}</span>
+                          <span className="font-bold text-indigo-700 bg-indigo-500/5 px-1.5 py-0.5 rounded border border-indigo-550/15">{item.product.sku}</span>
                           <span className="block text-slate-350 mt-1 truncate font-medium">{item.product.name}</span>
                         </td>
                         <td className="p-3.5 text-center">
@@ -274,7 +274,7 @@ export default function InventoryView({ token }: InventoryViewProps) {
                       <div className="truncate flex-1 space-y-0.5">
                         <div className="flex justify-between items-center">
                           <span className="font-semibold text-slate-200">{log.product.sku}</span>
-                          <span className={`font-bold ${isStockIn ? 'text-emerald-450' : 'text-rose-455'}`}>
+                          <span className={`font-bold ${isStockIn ? 'text-emerald-450' : 'text-rose-600'}`}>
                             {isStockIn ? '+' : ''}{log.quantity}
                           </span>
                         </div>

@@ -201,7 +201,7 @@ export default function PricingView({ token }: PricingViewProps) {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-indigo-200 font-outfit">Outward Pricing & Margin Engine</h2>
+        <h2 className="text-2xl font-bold text-primary font-outfit">Outward Pricing & Margin Engine</h2>
         <p className="text-xs text-slate-400 font-medium">Verify channels payouts and listing profit margins after marketplace fees and GST</p>
       </div>
 
@@ -344,7 +344,7 @@ export default function PricingView({ token }: PricingViewProps) {
                 {/* margin amount card */}
                 <div className="glass-panel p-5 rounded-2xl border border-indigo-500/10">
                   <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block">Profit Margin (INR)</span>
-                  <h4 className={`text-2xl font-extrabold mt-1 ${calcResult.net_margin_amount >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  <h4 className={`text-2xl font-extrabold mt-1 ${calcResult.net_margin_amount >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
                     ₹{calcResult.net_margin_amount.toFixed(2)}
                   </h4>
                   <p className="text-[10px] text-slate-500 mt-2">Net profit per unit sold</p>
@@ -353,7 +353,7 @@ export default function PricingView({ token }: PricingViewProps) {
                 {/* margin percent card */}
                 <div className={`glass-panel p-5 rounded-2xl border ${calcResult.net_margin_percent >= 15 ? 'bg-emerald-500/5 border-emerald-500/10' : 'bg-rose-500/5 border-rose-500/10'}`}>
                   <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block">Margin Percent</span>
-                  <h4 className={`text-2xl font-extrabold mt-1 ${calcResult.net_margin_percent >= 0 ? 'text-emerald-400' : 'text-rose-455'}`}>
+                  <h4 className={`text-2xl font-extrabold mt-1 ${calcResult.net_margin_percent >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
                     {calcResult.net_margin_percent.toFixed(1)}%
                   </h4>
                   <p className="text-[10px] text-slate-500 mt-2">
@@ -402,14 +402,14 @@ export default function PricingView({ token }: PricingViewProps) {
                       <div>
                         <h5 className="font-bold text-slate-200">{t.channel_name}</h5>
                         {t.is_default && (
-                          <span className="text-[9px] bg-indigo-500/10 text-indigo-300 px-1.5 py-0.5 rounded uppercase font-extrabold mt-1 inline-block">Default</span>
+                          <span className="text-[9px] bg-indigo-500/10 text-indigo-700 px-1.5 py-0.5 rounded uppercase font-extrabold mt-1 inline-block">Default</span>
                         )}
                       </div>
                       
                       {!isEditing && (
                         <button
                           onClick={() => handleEditTemplate(t)}
-                          className="text-[10px] text-indigo-400 hover:text-indigo-300 font-semibold"
+                          className="text-[10px] text-indigo-600 hover:text-indigo-700 font-semibold"
                         >
                           Edit Rules
                         </button>

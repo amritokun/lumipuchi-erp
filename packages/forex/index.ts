@@ -1,6 +1,6 @@
 export interface ExchangeRate {
-  fromCurrency: string; // e.g. "USD", "CNY"
-  toCurrency: string; // e.g. "INR"
+  fromCurrency: string;
+  toCurrency: string;
   rate: number;
   updatedAt: string;
 }

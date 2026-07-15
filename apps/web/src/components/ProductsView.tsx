@@ -23,7 +23,7 @@ export default function ProductsView({ token }: ProductsViewProps) {
   const [showAddForm, setShowAddForm] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Form State
+
   const [sku, setSku] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [catalogueId, setCatalogueId] = useState<string>("");
@@ -458,11 +458,10 @@ export default function ProductsView({ token }: ProductsViewProps) {
                   </span>
                 </div>
                 <span
-                  className={`px-2 py-0.5 text-[10px] font-bold rounded border uppercase ${
-                    product.is_active
+                  className={`px-2 py-0.5 text-[10px] font-bold rounded border uppercase ${product.is_active
                       ? "bg-emerald-500/10 text-emerald-450 border-emerald-500/20"
                       : "bg-slate-500/10 text-slate-400 border-slate-500/20"
-                  }`}
+                    }`}
                 >
                   {product.is_active ? "Active" : "Inactive"}
                 </span>

@@ -1,9 +1,9 @@
 export interface StockLevels {
   productId: string;
-  warehouseQty: number; // local physical stock
-  inTransitQty: number;  // POs in transit from China
-  virtualQty: number;    // warehouseQty + inTransitQty - reserved/allocated
-  allocatedQty: number;  // reserved for orders in process
+  warehouseQty: number;
+  inTransitQty: number;
+  virtualQty: number;
+  allocatedQty: number;
   reorderPoint: number;
 }
 

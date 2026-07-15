@@ -29,7 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
   useEffect(() => {
-    // Check if token exists in localStorage
+
     const savedToken = localStorage.getItem("lp_token");
     if (savedToken) {
       setToken(savedToken);
@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const userData = await res.json();
         setUser(userData);
       } else {
-        // Token might have expired
+
         logout();
       }
     } catch (err) {
@@ -87,7 +87,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const errData = await res.json();
         setError(
           parseErrorDetail(errData.detail) ||
-            "Login failed. Incorrect email or password.",
+          "Login failed. Incorrect email or password.",
         );
         return false;
       }
@@ -132,13 +132,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (res.ok) {
-        // Auto-login after successful signup
+
         return await login(email, password);
       } else {
         const errData = await res.json();
         setError(
           parseErrorDetail(errData.detail) ||
-            "Signup failed. Please try again.",
+          "Signup failed. Please try again.",
         );
         return false;
       }

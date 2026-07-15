@@ -13,8 +13,8 @@ export interface Supplier {
   email?: string;
   phone?: string;
   address?: string;
-  country: string; // e.g. "China"
-  currency: string; // e.g. "USD" or "CNY"
+  country: string;
+  currency: string;
   is_active: boolean;
 }
 

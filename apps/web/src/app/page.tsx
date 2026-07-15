@@ -6,7 +6,7 @@ import { calculateLandedCost } from "@lumipuchi/forex";
 import { calculateVirtualQty } from "@lumipuchi/inventory";
 import { useAuth } from "@/context/AuthContext";
 
-// Import newly created sub-views
+
 import SuppliersView from "@/components/SuppliersView";
 import ForexView from "@/components/ForexView";
 import POsView from "@/components/POsView";
@@ -45,10 +45,10 @@ export default function Home() {
     logout,
   } = useAuth();
 
-  // Tab Navigation State
+
   const [activeTab, setActiveTab] = useState<string>("dashboard");
 
-  // Auth Form State
+
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -56,7 +56,7 @@ export default function Home() {
   const [role, setRole] = useState<string>("viewer");
   const [submitting, setSubmitting] = useState<boolean>(false);
 
-  // Dashboard Calculator State
+
   const [costCny, setCostCny] = useState<number>(50);
   const [exchangeRate, setExchangeRate] = useState<number>(11.5);
   const [dutyPercent, setDutyPercent] = useState<number>(20);
@@ -82,7 +82,7 @@ export default function Home() {
     setSubmitting(false);
   };
 
-  // Landed Cost calculations using our forex package
+
   const landedCost = calculateLandedCost(
     costCny,
     exchangeRate,
@@ -90,7 +90,7 @@ export default function Home() {
     shippingCost,
   );
 
-  // Pricing payout calculations using our pricing engine
+
   const pricingResult = calculateChannelPayout(
     sellingPrice,
     landedCost,
@@ -98,10 +98,10 @@ export default function Home() {
     defaultFees,
   );
 
-  // Inventory virtual calculation
+
   const virtualStock = calculateVirtualQty(120, 500, 30);
 
-  // 1. Loading Screen
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-background">
@@ -113,7 +113,7 @@ export default function Home() {
     );
   }
 
-  // 2. Auth Screen (Login / Signup)
+
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen px-4">
@@ -254,10 +254,10 @@ export default function Home() {
     );
   }
 
-  // 3. Dashboard Container (Authenticated)
+
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-background text-foreground">
-      {/* Sidebar Navigation */}
+
       <aside className="w-full md:w-64 border-r border-white/10 p-6 flex flex-col justify-between bg-slate-950/20 shrink-0">
         <div className="space-y-8">
           <div>
@@ -272,88 +272,80 @@ export default function Home() {
           <nav className="space-y-1">
             <button
               onClick={() => setActiveTab("dashboard")}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === "dashboard"
-                  ? "bg-indigo-600 text-white"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-              }`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${activeTab === "dashboard"
+                ? "bg-indigo-600 text-white"
+                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                }`}
             >
               <TrendingUp size={16} />
               Overview
             </button>
             <button
               onClick={() => setActiveTab("suppliers")}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === "suppliers"
-                  ? "bg-indigo-600 text-white"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-              }`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${activeTab === "suppliers"
+                ? "bg-indigo-600 text-white"
+                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                }`}
             >
               <Users size={16} />
               Suppliers
             </button>
             <button
               onClick={() => setActiveTab("products")}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === "products"
-                  ? "bg-indigo-600 text-white"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-              }`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${activeTab === "products"
+                ? "bg-indigo-600 text-white"
+                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                }`}
             >
               <Package size={16} />
               Products
             </button>
             <button
               onClick={() => setActiveTab("forex")}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === "forex"
-                  ? "bg-indigo-600 text-white"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-              }`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${activeTab === "forex"
+                ? "bg-indigo-600 text-white"
+                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                }`}
             >
               <DollarSign size={16} />
               Forex Rates
             </button>
             <button
               onClick={() => setActiveTab("pos")}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === "pos"
-                  ? "bg-indigo-600 text-white"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-              }`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${activeTab === "pos"
+                ? "bg-indigo-600 text-white"
+                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                }`}
             >
               <FolderTree size={16} />
               Purchase Orders
             </button>
             <button
               onClick={() => setActiveTab("inventory")}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === "inventory"
-                  ? "bg-indigo-600 text-white"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-              }`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${activeTab === "inventory"
+                ? "bg-indigo-600 text-white"
+                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                }`}
             >
               <Layers size={16} />
               Inventory
             </button>
             <button
               onClick={() => setActiveTab("pricing-engine")}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === "pricing-engine"
-                  ? "bg-indigo-600 text-white"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-              }`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${activeTab === "pricing-engine"
+                ? "bg-indigo-600 text-white"
+                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                }`}
             >
               <Percent size={16} />
               Pricing Engine
             </button>
             <button
               onClick={() => setActiveTab("orders")}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
-                activeTab === "orders"
-                  ? "bg-indigo-600 text-white"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-              }`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition ${activeTab === "orders"
+                ? "bg-indigo-600 text-white"
+                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                }`}
             >
               <ShoppingCart size={16} />
               Orders & Returns
@@ -361,7 +353,7 @@ export default function Home() {
           </nav>
         </div>
 
-        {/* User profile summary / Logout */}
+
         <div className="border-t border-white/10 pt-6 mt-6 space-y-4">
           <div className="flex items-center gap-3">
             <div className="h-9 w-9 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center font-bold text-indigo-400 text-sm">
@@ -386,9 +378,9 @@ export default function Home() {
         </div>
       </aside>
 
-      {/* Main Content Area */}
+
       <main className="flex-1 p-6 md:p-10 max-w-5xl overflow-y-auto">
-        {/* Render Tab Contents */}
+
         {activeTab === "dashboard" && (
           <div className="space-y-10">
             <div>
@@ -400,7 +392,7 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Overview Cards */}
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="glass-card p-6 rounded-2xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-6 opacity-10 text-indigo-400">
@@ -447,9 +439,9 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Calculator Playground */}
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Landed Cost Inputs & Output */}
+
               <div className="glass-panel p-8 rounded-2xl">
                 <h2 className="text-2xl font-bold font-outfit mb-6 text-indigo-600 flex items-center gap-2">
                   <Settings size={20} /> Landed Cost Calculator
@@ -520,7 +512,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Pricing Payout Outputs */}
+
               <div className="glass-panel p-8 rounded-2xl flex flex-col justify-between">
                 <div>
                   <h2 className="text-2xl font-bold font-outfit mb-6 text-purple-600 flex items-center gap-2">
@@ -598,27 +590,27 @@ export default function Home() {
           </div>
         )}
 
-        {/* Tab 2: Suppliers */}
+
         {activeTab === "suppliers" && token && <SuppliersView token={token} />}
 
-        {/* Tab 3: Products */}
+
         {activeTab === "products" && token && <ProductsView token={token} />}
 
-        {/* Tab 4: Forex */}
+
         {activeTab === "forex" && token && <ForexView token={token} />}
 
-        {/* Tab 5: POs */}
+
         {activeTab === "pos" && token && <POsView token={token} />}
 
-        {/* Tab 6: Inventory */}
+
         {activeTab === "inventory" && token && <InventoryView token={token} />}
 
-        {/* Tab 7: Pricing Engine */}
+
         {activeTab === "pricing-engine" && token && (
           <PricingView token={token} />
         )}
 
-        {/* Tab 8: Orders & Returns */}
+
         {activeTab === "orders" && token && <OrdersView token={token} />}
       </main>
     </div>

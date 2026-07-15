@@ -54,7 +54,7 @@ export default function POsView({ token }: POsViewProps) {
   const [showAddForm, setShowAddForm] = useState<boolean>(false);
   const [expandedPoId, setExpandedPoId] = useState<string | null>(null);
 
-  // New PO State
+
   const [poNumber, setPoNumber] = useState<string>("");
   const [supplierId, setSupplierId] = useState<string>("");
   const [currency, setCurrency] = useState<string>("CNY");
@@ -111,13 +111,13 @@ export default function POsView({ token }: POsViewProps) {
     fetchSuppliers();
   }, [token]);
 
-  // Adjust currency and default exchange rate when supplier changes
+
   const handleSupplierChange = async (sId: string) => {
     setSupplierId(sId);
     const selectedSupplier = suppliers.find((s) => s.id === sId);
     if (selectedSupplier) {
       setCurrency(selectedSupplier.currency);
-      // Fetch current rate
+
       try {
         const res = await fetch(
           `${API_URL}/forex/${selectedSupplier.currency}`,
@@ -166,7 +166,7 @@ export default function POsView({ token }: POsViewProps) {
     setError(null);
     setSubmitting(true);
 
-    // Validate items
+
     const invalidItem = items.some(
       (item) =>
         !item.sku ||
@@ -285,7 +285,7 @@ export default function POsView({ token }: POsViewProps) {
             </div>
           )}
 
-          {/* Primary Metadata */}
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label className="block text-xs font-medium text-slate-450 mb-1">
@@ -346,7 +346,7 @@ export default function POsView({ token }: POsViewProps) {
             </div>
           </div>
 
-          {/* Shared Expenses */}
+
           <div className="border-t border-white/5 pt-4">
             <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
               Landed Cost Shared Expenses (INR)
@@ -433,7 +433,7 @@ export default function POsView({ token }: POsViewProps) {
             </div>
           </div>
 
-          {/* Dynamic Item Rows */}
+
           <div className="border-t border-white/5 pt-4">
             <div className="flex justify-between items-center mb-3">
               <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
@@ -569,7 +569,7 @@ export default function POsView({ token }: POsViewProps) {
               key={po.id}
               className="glass-card rounded-2xl overflow-hidden border border-white/5"
             >
-              {/* Summary Bar */}
+
               <div
                 onClick={() => toggleExpand(po.id)}
                 className="p-5 flex flex-wrap justify-between items-center gap-4 cursor-pointer hover:bg-white/5 transition"
@@ -642,10 +642,10 @@ export default function POsView({ token }: POsViewProps) {
                 </div>
               </div>
 
-              {/* Expanded Details */}
+
               {expandedPoId === po.id && (
                 <div className="bg-slate-950/40 border-t border-white/5 p-6 space-y-6">
-                  {/* Cost Allocation Summary */}
+
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-xs">
                     <div className="p-3 bg-slate-900/60 rounded-xl border border-white/5">
                       <span className="text-slate-500 block">
@@ -695,7 +695,7 @@ export default function POsView({ token }: POsViewProps) {
                     </div>
                   </div>
 
-                  {/* Items Landed Cost List */}
+
                   <div className="space-y-3">
                     <h5 className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                       <Package size={14} /> Item Landed Cost Calculations (INR)

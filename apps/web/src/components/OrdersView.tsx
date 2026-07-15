@@ -27,7 +27,7 @@ interface Order {
   channel_order_id: string;
   channel_name: string;
   customer_name?: string;
-  status: string; // pending, shipped, delivered, returned, cancelled
+  status: string;
   selling_price: number;
   payout_amount: number;
   profit_margin: number;
@@ -42,7 +42,7 @@ interface OrderReturn {
   sku: string;
   quantity: number;
   reason?: string;
-  status: string; // initiated, received, restocked, lost
+  status: string;
   refund_amount: number;
   created_at: string;
 }
@@ -63,7 +63,7 @@ export default function OrdersView({ token }: OrdersViewProps) {
 
   const fetchData = async () => {
     try {
-      // Fetch orders
+
       const orderRes = await fetch(`${API_URL}/orders`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -72,7 +72,7 @@ export default function OrdersView({ token }: OrdersViewProps) {
         setOrders(orderData);
       }
 
-      // Fetch returns
+
       const returnRes = await fetch(`${API_URL}/returns`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -81,7 +81,7 @@ export default function OrdersView({ token }: OrdersViewProps) {
         setReturns(returnData);
       }
 
-      // Fetch products to assist simulation
+
       const prodRes = await fetch(`${API_URL}/products`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -100,11 +100,11 @@ export default function OrdersView({ token }: OrdersViewProps) {
     fetchData();
   }, [token]);
 
-  // Simulate Channel Data Syncing (Celery Mockup)
+
   const handleSyncChannels = async () => {
     setSyncing(true);
     try {
-      // Create a few mockup orders from Amazon/Flipkart/Meesho
+
       if (products.length === 0) {
         alert(
           "Please create at least one product in the catalog first to sync orders!",
@@ -131,7 +131,7 @@ export default function OrdersView({ token }: OrdersViewProps) {
       const unitPrice = 499 + Math.floor(Math.random() * 500);
       const totalSP = qty * unitPrice;
 
-      // Sync mock order
+
       const mockOrderNo = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
       const orderPayload = {
         channel_order_id: mockOrderNo,
@@ -159,7 +159,7 @@ export default function OrdersView({ token }: OrdersViewProps) {
       });
 
       if (res.ok) {
-        // Maybe occasionally create a return
+
         if (Math.random() > 0.6) {
           const createdOrder = await res.json();
           const returnPayload = {
@@ -186,14 +186,14 @@ export default function OrdersView({ token }: OrdersViewProps) {
     } catch (err) {
       console.error("Error syncing:", err);
     } finally {
-      // Add fake animation delay for Celery job completion feel
+
       setTimeout(() => {
         setSyncing(false);
       }, 800);
     }
   };
 
-  // Change order status (e.g. to shipped or delivered)
+
   const handleUpdateStatus = async (orderId: string, status: string) => {
     setUpdatingOrderId(orderId);
     try {
@@ -216,7 +216,7 @@ export default function OrdersView({ token }: OrdersViewProps) {
     }
   };
 
-  // Process return restock
+
   const handleRestockReturn = async (returnId: string) => {
     try {
       const res = await fetch(`${API_URL}/returns/${returnId}`, {
@@ -236,7 +236,7 @@ export default function OrdersView({ token }: OrdersViewProps) {
     }
   };
 
-  // Analytics helper calculations
+
   const totalSales = orders.reduce(
     (sum, o) => (o.status !== "cancelled" ? sum + o.selling_price : sum),
     0,
@@ -255,7 +255,7 @@ export default function OrdersView({ token }: OrdersViewProps) {
 
   return (
     <div className="space-y-8">
-      {/* Header with Sync Trigger */}
+
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-primary font-outfit">
@@ -292,7 +292,7 @@ export default function OrdersView({ token }: OrdersViewProps) {
         </div>
       ) : (
         <>
-          {/* Analytics Widgets */}
+
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="glass-panel p-5 rounded-2xl">
               <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block">
@@ -362,7 +362,7 @@ export default function OrdersView({ token }: OrdersViewProps) {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left/Center Column: Orders List */}
+
             <div className="lg:col-span-2 space-y-4">
               <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                 <ShoppingCart size={16} /> Channel Orders list
@@ -438,15 +438,14 @@ export default function OrdersView({ token }: OrdersViewProps) {
                           </td>
                           <td className="p-3.5 text-center">
                             <span
-                              className={`px-2 py-0.5 text-[9px] font-bold rounded uppercase border ${
-                                o.status === "delivered"
-                                  ? "bg-emerald-500/5 text-emerald-600 border-emerald-500/10"
-                                  : o.status === "shipped"
-                                    ? "bg-indigo-500/5 text-indigo-600 border-indigo-500/10"
-                                    : o.status === "cancelled"
-                                      ? "bg-slate-800 text-slate-500 border-white/5"
-                                      : "bg-amber-500/5 text-amber-600 border-amber-500/10"
-                              }`}
+                              className={`px-2 py-0.5 text-[9px] font-bold rounded uppercase border ${o.status === "delivered"
+                                ? "bg-emerald-500/5 text-emerald-600 border-emerald-500/10"
+                                : o.status === "shipped"
+                                  ? "bg-indigo-500/5 text-indigo-600 border-indigo-500/10"
+                                  : o.status === "cancelled"
+                                    ? "bg-slate-800 text-slate-500 border-white/5"
+                                    : "bg-amber-500/5 text-amber-600 border-amber-500/10"
+                                }`}
                             >
                               {o.status}
                             </span>
@@ -486,7 +485,7 @@ export default function OrdersView({ token }: OrdersViewProps) {
               </div>
             </div>
 
-            {/* Right Column: Returns List */}
+
             <div className="space-y-4">
               <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                 <ArrowLeftRight size={16} /> Returns Processing
@@ -513,11 +512,10 @@ export default function OrdersView({ token }: OrdersViewProps) {
                           </span>
                         </div>
                         <span
-                          className={`px-2 py-0.5 text-[9px] font-bold rounded uppercase border ${
-                            r.status === "restocked"
-                              ? "bg-emerald-500/5 text-emerald-600 border-emerald-500/10"
-                              : "bg-rose-500/5 text-rose-600 border-rose-500/10"
-                          }`}
+                          className={`px-2 py-0.5 text-[9px] font-bold rounded uppercase border ${r.status === "restocked"
+                            ? "bg-emerald-500/5 text-emerald-600 border-emerald-500/10"
+                            : "bg-rose-500/5 text-rose-600 border-rose-500/10"
+                            }`}
                         >
                           {r.status}
                         </span>

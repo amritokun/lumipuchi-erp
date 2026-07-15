@@ -52,7 +52,7 @@ export default function InventoryView({ token }: InventoryViewProps) {
   const [logs, setLogs] = useState<StockLog[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Adjustment Form state
+
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
   const [newQty, setNewQty] = useState<number>(0);
   const [refReason, setRefReason] = useState<string>("Stock Audit");
@@ -63,7 +63,7 @@ export default function InventoryView({ token }: InventoryViewProps) {
 
   const fetchData = async () => {
     try {
-      // Fetch Inventory
+
       const invRes = await fetch(`${API_URL}/inventory`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -72,7 +72,7 @@ export default function InventoryView({ token }: InventoryViewProps) {
         setInventory(invData);
       }
 
-      // Fetch Logs
+
       const logsRes = await fetch(`${API_URL}/inventory/logs`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -144,7 +144,7 @@ export default function InventoryView({ token }: InventoryViewProps) {
         </p>
       </div>
 
-      {/* Adjust Stock Modal/Section */}
+
       {editingItem && (
         <form
           onSubmit={handleAdjust}
@@ -213,7 +213,7 @@ export default function InventoryView({ token }: InventoryViewProps) {
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Inventory Table List */}
+
           <div className="lg:col-span-2 space-y-4">
             <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
               <Package size={14} /> Warehouse Stock Summary
@@ -298,7 +298,7 @@ export default function InventoryView({ token }: InventoryViewProps) {
             </div>
           </div>
 
-          {/* Real-time Audit Logs */}
+
           <div className="space-y-4">
             <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
               <History size={14} /> Stock Movement Logs

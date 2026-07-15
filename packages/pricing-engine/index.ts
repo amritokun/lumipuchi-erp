@@ -32,7 +32,6 @@ export function calculateChannelPayout(
   const totalFees = referralFee + closingFee + weightHandlingFee + otherFees;
   const gstAmount = (sellingPrice * gstPercent) / 100;
 
-  // Net payout received from platform (exclusive of return rates logic for base calculation)
   const netPayout = sellingPrice - totalFees - gstAmount;
   const netMarginAmount = netPayout - landedCost;
   const netMarginPercent = sellingPrice > 0 ? (netMarginAmount / sellingPrice) * 100 : 0;

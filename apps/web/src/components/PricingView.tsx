@@ -47,26 +47,26 @@ export default function PricingView({ token }: PricingViewProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const [calculating, setCalculating] = useState<boolean>(false);
 
-  // Selector states
+
   const [selectedProductId, setSelectedProductId] = useState<string>("");
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>("");
 
-  // Input fields for calculation
+
   const [sellingPrice, setSellingPrice] = useState<number>(999);
   const [landedCost, setLandedCost] = useState<number>(250);
   const [gstPercent, setGstPercent] = useState<number>(18.0);
 
-  // Custom manual fee overrides
+
   const [useCustomFees, setUseCustomFees] = useState<boolean>(false);
   const [referralFeePercent, setReferralFeePercent] = useState<number>(12.0);
   const [fixedClosingFee, setFixedClosingFee] = useState<number>(30.0);
   const [weightHandlingFee, setWeightHandlingFee] = useState<number>(65.0);
   const [otherFees, setOtherFees] = useState<number>(0.0);
 
-  // Result state
+
   const [calcResult, setCalcResult] = useState<PricingResult | null>(null);
 
-  // Template editor state (allows editing of commissions in the ERP)
+
   const [editingTemplateId, setEditingTemplateId] = useState<string | null>(
     null,
   );
@@ -80,14 +80,14 @@ export default function PricingView({ token }: PricingViewProps) {
 
   const fetchData = async () => {
     try {
-      // Fetch templates
+
       const tempRes = await fetch(`${API_URL}/pricing/templates`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (tempRes.ok) {
         const tempData = await tempRes.json();
         setTemplates(tempData);
-        // Find default template
+
         const def = tempData.find((t: ChannelTemplate) => t.is_default);
         if (def) {
           setSelectedTemplateId(def.id);
@@ -96,7 +96,7 @@ export default function PricingView({ token }: PricingViewProps) {
         }
       }
 
-      // Fetch products
+
       const prodRes = await fetch(`${API_URL}/products`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -115,18 +115,18 @@ export default function PricingView({ token }: PricingViewProps) {
     fetchData();
   }, [token]);
 
-  // Handle product selection (pre-fills landed cost guess or GST)
+
   const handleProductChange = (prodId: string) => {
     setSelectedProductId(prodId);
     const prod = products.find((p) => p.id === prodId);
     if (prod) {
       setGstPercent(prod.gst_percent);
-      // Pre-fill landed cost if available or default
-      setLandedCost(150); // placeholder or let manual adjust
+
+      setLandedCost(150);
     }
   };
 
-  // Run margins calculation
+
   const handleCalculate = async () => {
     setCalculating(true);
     try {
@@ -165,7 +165,7 @@ export default function PricingView({ token }: PricingViewProps) {
     }
   };
 
-  // Re-run calculation when basic inputs change
+
   useEffect(() => {
     if (token && !loading) {
       handleCalculate();
@@ -237,7 +237,7 @@ export default function PricingView({ token }: PricingViewProps) {
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column: Calculator Inputs */}
+
           <div className="lg:col-span-2 space-y-6">
             <div className="glass-panel p-6 rounded-2xl space-y-5">
               <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
@@ -325,7 +325,7 @@ export default function PricingView({ token }: PricingViewProps) {
                 </div>
               </div>
 
-              {/* Custom Overrides toggle */}
+
               <div className="border-t border-white/5 pt-4">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -398,10 +398,10 @@ export default function PricingView({ token }: PricingViewProps) {
               </div>
             </div>
 
-            {/* Calculations results display */}
+
             {calcResult && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* payout card */}
+
                 <div className="glass-panel p-5 rounded-2xl border border-indigo-500/10">
                   <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block">
                     Net Payout (Base)
@@ -414,7 +414,7 @@ export default function PricingView({ token }: PricingViewProps) {
                   </p>
                 </div>
 
-                {/* margin amount card */}
+
                 <div className="glass-panel p-5 rounded-2xl border border-indigo-500/10">
                   <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block">
                     Profit Margin (INR)
@@ -429,7 +429,7 @@ export default function PricingView({ token }: PricingViewProps) {
                   </p>
                 </div>
 
-                {/* margin percent card */}
+
                 <div
                   className={`glass-panel p-5 rounded-2xl border ${calcResult.net_margin_percent >= 15 ? "bg-emerald-500/5 border-emerald-500/10" : "bg-rose-500/5 border-rose-500/10"}`}
                 >
@@ -448,7 +448,7 @@ export default function PricingView({ token }: PricingViewProps) {
                   </p>
                 </div>
 
-                {/* Details Breakdown */}
+
                 <div className="glass-panel p-6 rounded-2xl md:col-span-3 space-y-4">
                   <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
                     Fee & Tax Breakdown (INR)
@@ -460,7 +460,7 @@ export default function PricingView({ token }: PricingViewProps) {
                         {useCustomFees
                           ? referralFeePercent
                           : templates.find((t) => t.id === selectedTemplateId)
-                              ?.referral_fee_percent || 0}
+                            ?.referral_fee_percent || 0}
                         %)
                       </span>
                       <span className="font-bold text-white mt-0.5 block">
@@ -497,7 +497,7 @@ export default function PricingView({ token }: PricingViewProps) {
             )}
           </div>
 
-          {/* Right Column: Template Configurations */}
+
           <div className="space-y-4">
             <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
               <Settings size={14} /> Channel Rules Configuration

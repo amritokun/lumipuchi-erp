@@ -21,7 +21,7 @@ body {
   min-height: 100vh;
 }
 
-/* Fast light cards (removed heavy blur for performance) */
+
 .glass-panel {
   background: #ffffff;
   border: 1px solid var(--border);

@@ -10,14 +10,19 @@ This guide explains how to deploy Lumipuchi ERP to a Linux Virtual Private Serve
 
 ## Step 1: Configure DNS Records
 
-Before starting the server, you must point your domain to your VPS's public IP address. Caddy requires valid DNS records to issue SSL certificates.
+Before starting the server, you must point your domain to your VPS's public IP address. Caddy requires valid DNS records to issue SSL certificates automatically.
 
-Go to your domain registrar (e.g., GoDaddy, Namecheap, Cloudflare) and create **two A Records**:
+Go to your domain registrar's DNS settings (e.g., Cloudflare, GoDaddy, Namecheap) and create **two A Records**:
 
-1.  **Host/Name:** `admin` -> **Value/Points To:** `<Your_VPS_IP>` (For the web dashboard)
-2.  **Host/Name:** `api` -> **Value/Points To:** `<Your_VPS_IP>` (For the backend API)
+| Type | Name / Host | Target / Value / Points To | Proxy Status (Cloudflare) |
+| :--- | :--- | :--- | :--- |
+| **A** | `admin` | `<Your_VPS_IP_Address>` | ⚠️ **DNS Only** (Grey Cloud) |
+| **A** | `api` | `<Your_VPS_IP_Address>` | ⚠️ **DNS Only** (Grey Cloud) |
 
-*Note: DNS propagation can take a few minutes to an hour.*
+> [!WARNING]
+> **Cloudflare Users:** If you use Cloudflare, you **MUST** set the Proxy Status to "DNS Only" (Grey Cloud) for both records. If you leave them proxied (Orange Cloud), Caddy will fail to generate your Let's Encrypt SSL certificates because Cloudflare intercepts the traffic.
+
+*Note: DNS propagation can take a few minutes to an hour. You can verify your DNS has propagated using a tool like [dnschecker.org](https://dnschecker.org).*
 
 ## Step 2: Install Docker (If not installed)
 
